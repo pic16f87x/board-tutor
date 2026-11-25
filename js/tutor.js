@@ -9,7 +9,7 @@ class TutorEngine {
 
   loadSettings() {
     try {
-      const saved = JSON.parse(localStorage.getItem('ahaboard_settings') || '{}');
+      const saved = JSON.parse(localStorage.getItem('chalknote_settings') || '{}');
       return {
         provider: saved.provider || 'builtin',
         apiKey: saved.apiKey || '',
@@ -30,7 +30,7 @@ class TutorEngine {
 
   saveSettings(next) {
     this.settings = { ...this.settings, ...next };
-    localStorage.setItem('ahaboard_settings', JSON.stringify(this.settings));
+    localStorage.setItem('chalknote_settings', JSON.stringify(this.settings));
   }
 
   hasLiveLLM() {
@@ -38,9 +38,9 @@ class TutorEngine {
   }
 
   getEngineLabel() {
-    if (!this.hasLiveLLM()) return '內建數學與教案白板引擎';
+    if (!this.hasLiveLLM()) return '內建國中小圖解白板引擎';
     return this.settings.provider === 'gemini'
-      ? `Gemini 即時 AI (${this.settings.geminiModel})`
+      ? `Gemini 個人金鑰 (${this.settings.geminiModel})`
       : `OpenAI 相容 (${this.settings.openaiModel})`;
   }
 
@@ -200,13 +200,14 @@ class TutorEngine {
         ? 'Exam Prep Mode: Organize key concepts, highlight common pitfalls, and wrap up with a 3-question quiz.'
         : 'Topic Mode: Teach visually from intuition to formula/diagram step by step like a warm 1-on-1 tutor.';
 
-    return `You are ahaboard, an AI whiteboard tutor who speaks naturally while drawing step-by-step on a 1000x620 whiteboard.
+    return `You are a friendly K-9 (elementary & junior high school) whiteboard tutor speaking naturally while drawing step-by-step on a 1000x620 whiteboard.
 Language: ${langName}.
 ${modeRule}
 Respond ONLY with valid JSON matching this schema (no markdown fences):
 {
   "title": "short lesson title",
-  "subject": "數學|物理|化學|生物|歷史|地理|資訊|綜合",
+  "gradeLabel": "國小|國中",
+  "subject": "數學|自然|理化|生物|國文|英文|歷史|地理|綜合",
   "mode": "${mode}",
   "steps": [
     {
@@ -292,7 +293,7 @@ Keep coordinates strictly inside x: 40..950, y: 40..585, avoid overlapping boxes
 
   async _answerWithLLM({ lesson, currentStepIndex, studentText, lang, attachments }) {
     const step = lesson.steps[currentStepIndex] || {};
-    const prompt = `You are the AI whiteboard tutor currently teaching "${lesson.title}" (${lesson.mode} mode), at step ${currentStepIndex + 1}: "${step.title}".
+    const prompt = `You are a friendly K-9 whiteboard tutor currently teaching "${lesson.title}" (${lesson.mode} mode), at step ${currentStepIndex + 1}: "${step.title}".
 Step speech was: "${step.speech}".
 Student interrupted and said: "${studentText}".
 Reply warmly and concisely in ${lang === 'en' ? 'English' : lang === 'ja' ? 'Japanese' : 'Traditional Chinese'}.

@@ -1,5 +1,6 @@
 /**
  * Web Speech API wrapper for AI Tutor TTS (speechSynthesis) and Student STT (SpeechRecognition).
+ * Includes iOS Safari / Android Chrome gesture unlock and cancel-then-speak race protection.
  */
 class SpeechManager {
   constructor() {
@@ -10,7 +11,10 @@ class SpeechManager {
     this.isListening = false;
     this.currentUtterance = null;
     this.voices = [];
+    this.unlocked = false;
+    this._speakSeq = 0;
     this.onSpeakStateChange = null;
+    this.onBlockedAutoplay = null;
 
     if ('speechSynthesis' in window) {
       const loadVoices = () => {
@@ -19,6 +23,24 @@ class SpeechManager {
       loadVoices();
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
+  }
+
+  /**
+   * Must be called inside a user gesture (touchstart / pointerdown / click)
+   * so iOS Safari and mobile Chrome permit subsequent async/auto-advance TTS.
+   */
+  unlock() {
+    if (this.unlocked || !('speechSynthesis' in window)) return;
+    this.unlocked = true;
+    try {
+      window.speechSynthesis.resume();
+      if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+        const silent = new SpeechSynthesisUtterance(' ');
+        silent.volume = 0;
+        silent.rate = 10;
+        window.speechSynthesis.speak(silent);
+      }
+    } catch (_) {}
   }
 
   getLocaleCode(lang) {
@@ -31,11 +53,28 @@ class SpeechManager {
   }
 
   pickVoice(locale) {
+    if (!this.voices.length) {
+      this.voices = window.speechSynthesis?.getVoices?.() || [];
+    }
     if (!this.voices.length) return null;
-    const exact = this.voices.find((v) => v.lang.toLowerCase() === locale.toLowerCase());
+
+    const norm = (s) => String(s || '').replace(/_/g, '-').toLowerCase();
+    const target = norm(locale);
+
+    const exact = this.voices.find((v) => norm(v.lang) === target);
     if (exact) return exact;
-    const prefix = locale.split('-')[0].toLowerCase();
-    return this.voices.find((v) => v.lang.toLowerCase().startsWith(prefix)) || null;
+
+    if (target === 'zh-tw') {
+      const twAlias = this.voices.find((v) => {
+        const l = norm(v.lang);
+        const n = (v.name || '').toLowerCase();
+        return l.includes('tw') || l.includes('hant') || n.includes('taiwan') || n.includes('mei-jia');
+      });
+      if (twAlias) return twAlias;
+    }
+
+    const prefix = target.split('-')[0];
+    return this.voices.find((v) => norm(v.lang).startsWith(prefix)) || null;
   }
 
   setLang(lang) {
@@ -54,7 +93,21 @@ class SpeechManager {
   }
 
   speak(text, { onEnd, onStart } = {}) {
-    this.stopSpeaking();
+    const seq = ++this._speakSeq;
+    const hadActiveSpeech = Boolean(
+      this.currentUtterance &&
+      'speechSynthesis' in window &&
+      (window.speechSynthesis.speaking || window.speechSynthesis.pending)
+    );
+    if (hadActiveSpeech) {
+      this.stopSpeaking();
+    } else {
+      clearTimeout(this._fallbackTimer);
+      clearTimeout(this._safetyTimer);
+      clearTimeout(this._startCheckTimer);
+      clearTimeout(this._queueTimer);
+    }
+
     if (!text) {
       if (onEnd) onEnd();
       return;
@@ -65,58 +118,91 @@ class SpeechManager {
       if (this.onSpeakStateChange) this.onSpeakStateChange(true);
       const fallbackMs = Math.min(6000, Math.max(1600, text.length * 85 / this.rate));
       this._fallbackTimer = setTimeout(() => {
+        if (seq !== this._speakSeq) return;
         if (this.onSpeakStateChange) this.onSpeakStateChange(false);
         if (onEnd) onEnd();
       }, fallbackMs);
       return;
     }
 
-    const cleaned = text.replace(/[*`#]/g, '').trim();
-    const utter = new SpeechSynthesisUtterance(cleaned);
-    const locale = this.getLocaleCode(this.lang);
-    utter.lang = locale;
-    utter.rate = this.rate;
-    const voice = this.pickVoice(locale);
-    if (voice) utter.voice = voice;
+    const startUtterance = () => {
+      if (seq !== this._speakSeq) return;
+      const cleaned = text.replace(/[*`#]/g, '').trim();
+      const utter = new SpeechSynthesisUtterance(cleaned);
+      const locale = this.getLocaleCode(this.lang);
+      utter.lang = locale;
+      utter.rate = this.rate;
+      utter.volume = 1;
+      const voice = this.pickVoice(locale);
+      if (voice) utter.voice = voice;
 
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      clearTimeout(this._safetyTimer);
-      this.currentUtterance = null;
-      if (this.onSpeakStateChange) this.onSpeakStateChange(false);
-      if (onEnd) onEnd();
+      let finished = false;
+      let started = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(this._safetyTimer);
+        clearTimeout(this._startCheckTimer);
+        this.currentUtterance = null;
+        window.__ahaboardUtter = null;
+        if (this.onSpeakStateChange) this.onSpeakStateChange(false);
+        if (onEnd) onEnd();
+      };
+
+      utter.onstart = () => {
+        started = true;
+        clearTimeout(this._startCheckTimer);
+        if (this.onSpeakStateChange) this.onSpeakStateChange(true);
+        if (onStart) onStart();
+      };
+      utter.onend = finish;
+      utter.onerror = finish;
+
+      // Safety timeout in case browser speechSynthesis stalls silently
+      const maxWait = Math.max(4500, (cleaned.length * 190) / this.rate + 2500);
+      this._safetyTimer = setTimeout(finish, maxWait);
+
+      // Detect mobile autoplay block if speech never starts within 1.4s
+      this._startCheckTimer = setTimeout(() => {
+        if (!started && !finished && this.onBlockedAutoplay) {
+          this.onBlockedAutoplay();
+        }
+      }, 1400);
+
+      // Keep strong reference on window to prevent iOS Safari GC collecting utter mid-speech
+      this.currentUtterance = utter;
+      window.__ahaboardUtter = utter;
+
+      try {
+        window.speechSynthesis.resume();
+        window.speechSynthesis.speak(utter);
+      } catch (_) {
+        finish();
+      }
     };
 
-    utter.onstart = () => {
-      if (this.onSpeakStateChange) this.onSpeakStateChange(true);
-      if (onStart) onStart();
-    };
-    utter.onend = finish;
-    utter.onerror = finish;
-
-    // Safety timeout in case browser speechSynthesis stalls silently
-    const maxWait = Math.max(4500, (cleaned.length * 190) / this.rate + 2500);
-    this._safetyTimer = setTimeout(finish, maxWait);
-
-    this.currentUtterance = utter;
-    try {
-      window.speechSynthesis.speak(utter);
-    } catch (_) {
-      finish();
+    // Delay briefly after cancel() so iOS Safari / Android WebView doesn't drop the new utterance
+    if (hadActiveSpeech) {
+      this._queueTimer = setTimeout(startUtterance, 80);
+    } else {
+      startUtterance();
     }
   }
 
-  stopSpeaking() {
+  stopSpeaking({ skipCancelIfIdle = false } = {}) {
     clearTimeout(this._fallbackTimer);
     clearTimeout(this._safetyTimer);
+    clearTimeout(this._startCheckTimer);
+    clearTimeout(this._queueTimer);
     if ('speechSynthesis' in window) {
-      try {
-        window.speechSynthesis.cancel();
-      } catch (_) {}
+      if (!skipCancelIfIdle || window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch (_) {}
+      }
     }
     this.currentUtterance = null;
+    window.__ahaboardUtter = null;
     if (this.onSpeakStateChange) this.onSpeakStateChange(false);
   }
 
@@ -132,7 +218,7 @@ class SpeechManager {
 
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRec) {
-      if (onError) onError('此瀏覽器不支援語音輸入，請改用文字輸入或使用 Chrome / Edge。');
+      if (onError) onError('此瀏覽器不支援語音輸入，請改用文字輸入或使用 Android Chrome。');
       return;
     }
 

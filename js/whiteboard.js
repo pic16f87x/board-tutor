@@ -65,8 +65,8 @@ class WhiteboardEngine {
 
   _computeFitTransform() {
     const padX = 20;
-    const padTop = 34;
-    const padBottom = 64; // Reserve space for floating student drawing toolbar
+    const padTop = 36;
+    const padBottom = 20;
     const availW = Math.max(200, this.stageW - padX * 2);
     const availH = Math.max(200, this.stageH - padTop - padBottom);
     const baseScale = Math.min(availW / this.LOGICAL_W, availH / this.LOGICAL_H);
@@ -267,6 +267,9 @@ class WhiteboardEngine {
       case 'orbitDiagram':
       case 'punnettSquare':
       case 'balanceScale':
+      case 'fractionBars':
+      case 'triangleAreaDemo':
+      case 'pythagorasDemo':
         return 950;
       case 'box':
       case 'rect':
@@ -561,6 +564,21 @@ class WhiteboardEngine {
 
       case 'orbitDiagram': {
         this._drawOrbitDiagram(ctx, item, p);
+        break;
+      }
+
+      case 'fractionBars': {
+        this._drawFractionBars(ctx, item, p);
+        break;
+      }
+
+      case 'triangleAreaDemo': {
+        this._drawTriangleAreaDemo(ctx, item, p);
+        break;
+      }
+
+      case 'pythagorasDemo': {
+        this._drawPythagorasDemo(ctx, item, p);
         break;
       }
 
@@ -1026,6 +1044,178 @@ class WhiteboardEngine {
     ctx.restore();
   }
 
+  _drawFractionBars(ctx, item, p) {
+    const x = item.x ?? 55;
+    const y = item.y ?? 130;
+    const barW = item.w ?? 380;
+    const barH = 54;
+    const split = Boolean(item.splitToSix);
+
+    ctx.save();
+    const drawBar = (bx, by, parts, filled, color, label, subParts = 0) => {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#182420';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, barW, barH, 10);
+      ctx.fill();
+
+      const fillW = (barW * filled / parts) * Math.min(1, p * 1.3);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(bx + 2, by + 2, Math.max(0, fillW - 4), barH - 4, 8);
+      ctx.fill();
+
+      // Main divisions
+      const divCount = subParts || parts;
+      ctx.strokeStyle = subParts ? '#0F766E' : '#182420';
+      ctx.lineWidth = subParts ? 1.8 : 2;
+      for (let i = 1; i < divCount; i++) {
+        const dx = bx + (barW * i) / divCount;
+        ctx.beginPath();
+        ctx.moveTo(dx, by);
+        ctx.lineTo(dx, by + barH);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = '#182420';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, barW, barH, 10);
+      ctx.stroke();
+
+      ctx.fillStyle = '#182420';
+      ctx.font = "700 17px 'Inter', 'Noto Sans TC', sans-serif";
+      ctx.fillText(label, bx, by - 10);
+    };
+
+    drawBar(x, y, 2, 1, 'rgba(15, 118, 110, 0.35)', split ? '1/2 切成 6 等分 ＝ 3/6' : '1/2（把一條切 2 份取 1 份）', split ? 6 : 0);
+    drawBar(x, y + 108, 3, 1, 'rgba(37, 99, 235, 0.32)', split ? '1/3 切成 6 等分 ＝ 2/6' : '1/3（把一條切 3 份取 1 份）', split ? 6 : 0);
+
+    if (split && p > 0.5) {
+      drawBar(x, y + 226, 6, 5, 'rgba(217, 119, 6, 0.38)', '合起來：3/6 ＋ 2/6 ＝ 5/6 ！', 6);
+    }
+    ctx.restore();
+  }
+
+  _drawTriangleAreaDemo(ctx, item, p) {
+    const x = item.x ?? 80;
+    const y = item.y ?? 165;
+    const base = 260;
+    const height = 190;
+    const showCopy = Boolean(item.showCopy);
+
+    ctx.save();
+    // Main triangle
+    ctx.fillStyle = 'rgba(15, 118, 110, 0.22)';
+    ctx.strokeStyle = '#0F766E';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x, y + height);
+    ctx.lineTo(x + base, y + height);
+    ctx.lineTo(x + 90, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Dashed height line
+    ctx.strokeStyle = '#DC2626';
+    ctx.setLineDash([6, 5]);
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(x + 90, y);
+    ctx.lineTo(x + 90, y + height);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (showCopy) {
+      const slide = Math.min(1, p * 1.2);
+      ctx.save();
+      ctx.globalAlpha = slide;
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.18)';
+      ctx.strokeStyle = '#2563EB';
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(x + 90, y);
+      ctx.lineTo(x + base + 90, y);
+      ctx.lineTo(x + base, y + height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    ctx.fillStyle = '#182420';
+    ctx.font = "700 16px 'Inter', 'Noto Sans TC', sans-serif";
+    ctx.fillText('底 (b)', x + base / 2 - 20, y + height + 26);
+    ctx.fillStyle = '#DC2626';
+    ctx.fillText('高 (h)', x + 98, y + height / 2);
+    ctx.restore();
+  }
+
+  _drawPythagorasDemo(ctx, item, p) {
+    const ox = item.x ?? 185;
+    const oy = item.y ?? 340;
+    const a = 90;  // vertical leg (3)
+    const b = 120; // horizontal leg (4)
+
+    ctx.save();
+    // Square on leg a (left)
+    if (item.showSquares) {
+      ctx.fillStyle = 'rgba(15, 118, 110, 0.22)';
+      ctx.strokeStyle = '#0F766E';
+      ctx.lineWidth = 2.4;
+      ctx.fillRect(ox - a, oy - a, a, a);
+      ctx.strokeRect(ox - a, oy - a, a, a);
+
+      // Square on leg b (bottom)
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.2)';
+      ctx.strokeStyle = '#2563EB';
+      ctx.fillRect(ox, oy, b, b);
+      ctx.strokeRect(ox, oy, b, b);
+
+      // Square on hypotenuse c (tilted)
+      const prog = Math.min(1, p * 1.2);
+      ctx.save();
+      ctx.globalAlpha = prog;
+      ctx.fillStyle = 'rgba(217, 119, 6, 0.24)';
+      ctx.strokeStyle = '#D97706';
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - a);
+      ctx.lineTo(ox + b, oy);
+      ctx.lineTo(ox + b + a, oy - b);
+      ctx.lineTo(ox + a, oy - a - b);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Right triangle
+    ctx.fillStyle = 'rgba(24, 36, 32, 0.08)';
+    ctx.strokeStyle = '#182420';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(ox + b, oy);
+    ctx.lineTo(ox, oy - a);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Right angle symbol
+    ctx.lineWidth = 2;
+    ctx.strokeRect(ox, oy - 16, 16, 16);
+
+    ctx.fillStyle = '#0F766E';
+    ctx.font = "700 16px 'JetBrains Mono', 'Noto Sans TC', monospace";
+    ctx.fillText(item.showSquares ? '3² = 9' : 'a = 3', ox - 68, oy - a / 2);
+    ctx.fillStyle = '#2563EB';
+    ctx.fillText(item.showSquares ? '4² = 16' : 'b = 4', ox + 30, oy + (item.showSquares ? 66 : 24));
+    ctx.fillStyle = '#D97706';
+    ctx.fillText(item.showSquares ? '5² = 25' : 'c = ?', ox + 75, oy - a - 28);
+    ctx.restore();
+  }
+
   // ==================== STUDENT DRAWING & PAN/ZOOM ====================
   _bindStudentEvents() {
     const canvas = this.studentCanvas;
@@ -1195,23 +1385,29 @@ class WhiteboardEngine {
     ctx.restore();
   }
 
-  exportPNG(filename = 'ahaboard-notes.png') {
+  exportPNG(filename = '小黑板筆記.png') {
     const out = document.createElement('canvas');
     out.width = this.aiCanvas.width;
     out.height = this.aiCanvas.height;
     const octx = out.getContext('2d');
-    octx.fillStyle = '#FFFCF4';
+    octx.fillStyle = '#FAFCFB';
     octx.fillRect(0, 0, out.width, out.height);
 
-    // Draw subtle dot grid
-    const step = 24 * this.dpr;
-    octx.fillStyle = 'rgba(27,27,31,0.12)';
+    // Draw subtle math graph grid
+    const step = 28 * this.dpr;
+    octx.strokeStyle = 'rgba(15, 118, 110, 0.08)';
+    octx.lineWidth = 1 * this.dpr;
     for (let gx = step; gx < out.width; gx += step) {
-      for (let gy = step; gy < out.height; gy += step) {
-        octx.beginPath();
-        octx.arc(gx, gy, 1.1 * this.dpr, 0, Math.PI * 2);
-        octx.fill();
-      }
+      octx.beginPath();
+      octx.moveTo(gx, 0);
+      octx.lineTo(gx, out.height);
+      octx.stroke();
+    }
+    for (let gy = step; gy < out.height; gy += step) {
+      octx.beginPath();
+      octx.moveTo(0, gy);
+      octx.lineTo(out.width, gy);
+      octx.stroke();
     }
 
     octx.drawImage(this.aiCanvas, 0, 0);

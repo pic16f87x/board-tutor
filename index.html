@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ahaboard｜邊講邊畫的 AI 白板家教</title>
+  <title>小黑板教室｜國小・國中 AI 互動筆記白板</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -15,133 +15,160 @@
     <header class="landing-nav">
       <a href="#" class="brand" id="brand-home">
         <span class="brand-mark" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect x="2" y="2" width="24" height="24" rx="7" fill="#1B1B1F" />
-            <path d="M7.5 19.5C10.5 14 13.5 9 16.5 12C19.5 15 19.5 10.5 21 8.5" stroke="#FFFCF4" stroke-width="2.2" stroke-linecap="round" />
-            <circle cx="20.8" cy="8.5" r="2" fill="#E85D3F" />
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="2" width="28" height="28" rx="9" fill="#0F766E" />
+            <rect x="6" y="7" width="20" height="14" rx="3" fill="#ECFDF5" fill-opacity="0.18" stroke="#CCFBF1" stroke-width="1.6" />
+            <path d="M9.5 16.5L13.5 12.5L16.5 15L22 10.5" stroke="#FDE68A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10 25H22" stroke="#CCFBF1" stroke-width="2" stroke-linecap="round" />
           </svg>
         </span>
-        <span class="brand-name">ahaboard</span>
-        <span class="brand-tag">AI 白板家教</span>
+        <span class="brand-text">
+          <span class="brand-name">小黑板教室</span>
+          <span class="brand-tag">國小・國中專屬學習桌</span>
+        </span>
       </a>
 
       <nav class="nav-actions">
-        <button type="button" class="nav-link-btn" id="open-saved-btn" title="查看我的學習紀錄">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
-          <span>上課紀錄</span>
+        <button type="button" class="nav-link-btn" id="open-saved-btn" title="查看我的筆記紀錄">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>學習紀錄</span>
           <span class="badge-count hidden" id="history-count">0</span>
         </button>
         <button type="button" class="nav-link-btn" id="landing-settings-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span>AI 引擎設定</span>
+          <span>模型設定</span>
         </button>
         <select id="landing-lang-select" class="lang-select" aria-label="選擇語言">
           <option value="zh-TW">繁體中文</option>
           <option value="zh-CN">简体中文</option>
           <option value="en">English</option>
-          <option value="ja">日本語</option>
         </select>
       </nav>
     </header>
 
     <main class="landing-main">
-      <section class="hero-section">
-        <div class="hero-eyebrow">
-          <span class="pulse-dot"></span>
-          <span>從「啊？」到「Aha!」的一對一白板互動課堂</span>
-        </div>
-        <h1 class="hero-title">
-          不只給你答案，<br />
-          <span class="highlight-underline">講到你會為止。</span>
-        </h1>
-        <p class="hero-subtitle">
-          輸入問題、拍下題目，或把筆記丟進來。AI 家教一邊開口講解、一邊在白板上把圖形、力圖與推導一步步畫出來；沒聽懂隨時打斷追問「為什麼」。
-        </p>
-
-        <!-- Composer Card -->
-        <div class="composer-card" id="composer-card">
-          <div class="composer-modes" role="tablist" aria-label="教學模式">
-            <button type="button" class="mode-pill active" data-mode="topic" role="tab" aria-selected="true">
-              <span class="mode-icon">🎯</span>
-              <span>主題</span>
-              <small>邊講邊畫從頭懂</small>
-            </button>
-            <button type="button" class="mode-pill" data-mode="exam" role="tab" aria-selected="false">
-              <span class="mode-icon">📝</span>
-              <span>備考</span>
-              <small>串重點＋抓易錯＋測驗</small>
-            </button>
-            <button type="button" class="mode-pill" data-mode="homework" role="tab" aria-selected="false">
-              <span class="mode-icon">🧭</span>
-              <span>作業</span>
-              <small>不直接給答案，一步步引導</small>
-            </button>
+      <div class="bento-hero">
+        <!-- Left Column: Question Composer -->
+        <section class="composer-column">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span>國小高年級・國中課業 視覺化筆記板</span>
           </div>
+          <h1 class="hero-title">
+            把課本難題，<br />
+            <span class="title-accent">畫成看得懂的每一步</span>
+          </h1>
+          <p class="hero-subtitle">
+            輸入數學算式、自然原理，或拍下學校作業，小黑板會用圖解搭配語音一步步拆解，卡住時隨時舉手問原因。
+          </p>
 
-          <div class="composer-input-wrap">
-            <textarea
-              id="landing-prompt"
-              rows="3"
-              placeholder="輸入任何想搞懂的問題，例如：踢出去的球為什麼會劃出一道弧線？或輸入方程式 2x + 5 = 17..."
-            ></textarea>
-
-            <div id="landing-attachments" class="attachments-strip hidden"></div>
-          </div>
-
-          <div class="composer-footer">
-            <div class="composer-tools">
-              <label class="tool-chip" for="landing-file-input" title="上傳作業照片、筆記文字檔或講義">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                <span>新增圖片 / 筆記</span>
-                <input id="landing-file-input" type="file" accept="image/*,.txt,.md,.csv,.pdf" hidden multiple />
-              </label>
-              <button type="button" class="tool-chip" id="add-url-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                <span>貼上網址 / 教材</span>
+          <div class="composer-card" id="composer-card">
+            <div class="composer-modes" role="tablist" aria-label="學習模式">
+              <button type="button" class="mode-pill active" data-mode="topic" role="tab" aria-selected="true">
+                <span class="mode-dot teal"></span>
+                <div>
+                  <strong>觀念講解</strong>
+                  <small>從圖形看懂原理</small>
+                </div>
               </button>
-              <button type="button" class="tool-chip" id="landing-mic-btn" title="語音提問">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                <span>語音提問</span>
+              <button type="button" class="mode-pill" data-mode="exam" role="tab" aria-selected="false">
+                <span class="mode-dot amber"></span>
+                <div>
+                  <strong>段考複習</strong>
+                  <small>重點整理＋練習題</small>
+                </div>
+              </button>
+              <button type="button" class="mode-pill" data-mode="homework" role="tab" aria-selected="false">
+                <span class="mode-dot indigo"></span>
+                <div>
+                  <strong>作業引導</strong>
+                  <small>提示思考不直接抄</small>
+                </div>
               </button>
             </div>
 
-            <button type="button" class="start-btn" id="start-lesson-btn">
-              <span>開始上課</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
+            <div class="composer-input-wrap">
+              <textarea
+                id="landing-prompt"
+                rows="3"
+                placeholder="輸入想學的單元或題目，例如：1/2 + 1/3 怎麼算？或輸入一元一次方程式 2x + 5 = 17..."
+              ></textarea>
+              <div id="landing-attachments" class="attachments-strip hidden"></div>
+            </div>
+
+            <div class="composer-footer">
+              <div class="composer-tools">
+                <label class="tool-chip" for="landing-file-input" title="拍照或匯入筆記檔案">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>拍照 / 筆記</span>
+                  <input id="landing-file-input" type="file" accept="image/*,.txt,.md,.csv" hidden multiple />
+                </label>
+                <button type="button" class="tool-chip" id="add-url-btn">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <span>貼上課文</span>
+                </button>
+                <button type="button" class="tool-chip" id="landing-mic-btn" title="語音輸入問題">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                  <span>語音</span>
+                </button>
+              </div>
+
+              <button type="button" class="start-btn" id="start-lesson-btn">
+                <span>打開白板開始學</span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Grade & Subject Curriculum Picker -->
+        <aside class="curriculum-column">
+          <div class="curriculum-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-kicker">精選單元庫</span>
+                <h2>點一個單元直接上課</h2>
+              </div>
+              <button type="button" class="shuffle-btn" id="shuffle-prompts-btn" title="換一組單元">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                <span>換一組</span>
+              </button>
+            </div>
+
+            <div class="grade-tabs" role="tablist" aria-label="年級篩選">
+              <button type="button" class="grade-tab active" data-grade="all">全部單元</button>
+              <button type="button" class="grade-tab" data-grade="elem">國小</button>
+              <button type="button" class="grade-tab" data-grade="junior">國中</button>
+            </div>
+
+            <div class="suggestions-grid" id="suggestions-grid"></div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Bottom Quick Guide Cards -->
+      <section class="study-highlights">
+        <div class="highlight-item">
+          <span class="hl-num">01</span>
+          <div>
+            <h3>圖解先於背公式</h3>
+            <p>分數條切分、三角形拼圖、畢氏定理正方形、座標直線交點，全部在方格筆記紙上逐步畫給你看。</p>
           </div>
         </div>
-
-        <!-- Try These Prompts -->
-        <div class="suggestions-block">
-          <div class="suggestions-header">
-            <span class="suggestions-label">或試試這些精選白板課堂</span>
-            <button type="button" class="shuffle-btn" id="shuffle-prompts-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-              <span>換一批</span>
-            </button>
+        <div class="highlight-item">
+          <span class="hl-num">02</span>
+          <div>
+            <h3>自己的筆也能一起算</h3>
+            <p>白板內建彩色畫筆、螢光筆與雷射筆，聽完一步就能自己直接在白板上圈出重點或驗算。</p>
           </div>
-          <div class="suggestions-grid" id="suggestions-grid"></div>
         </div>
-      </section>
-
-      <!-- Mode Feature Strip -->
-      <section class="features-strip">
-        <article class="feature-card">
-          <div class="feature-badge coral">邊講邊畫</div>
-          <h3>每一筆都有動畫與聲音</h3>
-          <p>函數曲線由數學引擎即時算出，力圖、拋物線、棋盤方格逐筆寫在白板上，搭配語音節奏同步推進。</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-badge cobalt">隨時打斷</div>
-          <h3>卡住就喊「等一下，為什麼？」</h3>
-          <p>上到一半隨時按下打斷或直接開口問，AI 老師會立刻暫停、在白板旁用紅筆補充推導，再繼續講下去。</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-badge emerald">作業＆備考</div>
-          <h3>引導思考 + 課後筆記小測驗</h3>
-          <p>作業模式絕不直接洩題；課後自動生成重點整理、易錯點標註與 3 題小測驗，錯題還能請老師重畫講解。</p>
-        </article>
+        <div class="highlight-item">
+          <span class="hl-num">03</span>
+          <div>
+            <h3>重點筆記＋隨堂 3 題</h3>
+            <p>每堂課都有整理好的考前易錯提醒與 3 題小測驗，寫錯馬上請白板針對那一題再畫一次。</p>
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -150,19 +177,20 @@
   <div id="classroom-view" class="view">
     <header class="studio-header">
       <div class="studio-left">
-        <button type="button" class="icon-btn" id="back-home-btn" title="回到首頁">
+        <button type="button" class="icon-btn" id="back-home-btn" title="回到書桌首頁">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="lesson-meta">
           <div class="lesson-title-row">
-            <h2 id="studio-lesson-title">拋體運動：踢出去的球為什麼劃出弧線？</h2>
-            <span class="mode-badge" id="studio-mode-badge">主題模式</span>
-            <span class="subject-badge" id="studio-subject-badge">物理</span>
+            <h2 id="studio-lesson-title">單元標題</h2>
+            <span class="grade-badge" id="studio-grade-badge">國小</span>
+            <span class="subject-badge" id="studio-subject-badge">數學</span>
+            <span class="mode-badge" id="studio-mode-badge">觀念講解</span>
           </div>
           <div class="lesson-status-row">
-            <span class="engine-indicator" id="engine-indicator">
+            <span class="engine-indicator">
               <span class="dot-live"></span>
-              <span id="engine-indicator-text">內建數學與教案白板引擎</span>
+              <span id="engine-indicator-text">內建國中小圖解白板引擎</span>
             </span>
           </div>
         </div>
@@ -170,139 +198,135 @@
 
       <div class="studio-controls">
         <div class="voice-controls">
-          <button type="button" class="pill-toggle active" id="tts-toggle-btn" title="開啟/關閉 AI 語音講解">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <button type="button" class="pill-toggle active" id="tts-toggle-btn" title="開啟/關閉語音朗讀">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             <span id="tts-toggle-label">語音開</span>
           </button>
-          <select id="speech-rate-select" class="compact-select" title="講解語速">
+          <select id="speech-rate-select" class="compact-select" title="語音速度">
             <option value="0.85">0.85x</option>
             <option value="1" selected>1.0x</option>
             <option value="1.2">1.2x</option>
-            <option value="1.4">1.4x</option>
           </select>
-          <select id="studio-lang-select" class="compact-select" title="課堂語言">
+          <select id="studio-lang-select" class="compact-select" title="語言">
             <option value="zh-TW">繁中</option>
             <option value="zh-CN">简中</option>
             <option value="en">EN</option>
-            <option value="ja">日本語</option>
           </select>
         </div>
 
         <div class="action-buttons">
           <button type="button" class="secondary-btn" id="open-notes-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             <span>筆記與測驗</span>
           </button>
-          <button type="button" class="secondary-btn" id="export-board-btn" title="下載白板圖片">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span>匯出白板</span>
+          <button type="button" class="secondary-btn" id="export-board-btn" title="存成圖片筆記">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>存成圖片</span>
           </button>
-          <button type="button" class="icon-btn" id="studio-settings-btn" title="AI 引擎與 API 設定">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <button type="button" class="icon-btn" id="studio-settings-btn" title="模型設定">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </button>
         </div>
       </div>
     </header>
 
     <div class="studio-workspace">
-      <!-- Whiteboard Column -->
-      <section class="whiteboard-pane" aria-label="互動白板">
-        <div class="whiteboard-stage" id="whiteboard-stage">
-          <canvas id="ai-board-canvas"></canvas>
-          <canvas id="student-draw-canvas"></canvas>
-
-          <!-- Animated AI Pen Pointer -->
-          <div id="ai-pen-cursor" class="ai-pen-cursor hidden" aria-hidden="true">
-            <div class="pen-nib"></div>
-            <span class="pen-label">AI 老師繪製中</span>
-          </div>
-
-          <!-- Top-Left Lesson Progress Pill -->
-          <div class="board-status-pill" id="board-status-pill">
-            <span class="status-wave" id="status-wave"></span>
-            <span id="board-status-text">準備上課...</span>
-          </div>
-
-          <!-- Floating Student Drawing Toolbar -->
-          <div class="draw-toolbar" role="toolbar" aria-label="學生畫筆工具">
-            <button type="button" class="tool-btn active" data-tool="pointer" title="移動白板 / 觀看">
+      <!-- Left Vertical Tool Dock + Whiteboard -->
+      <section class="whiteboard-pane" aria-label="方格筆記白板">
+        <div class="board-dock-row">
+          <!-- Vertical Student Tool Dock -->
+          <div class="draw-toolbar" role="toolbar" aria-label="畫筆工具列">
+            <button type="button" class="tool-btn active" data-tool="pointer" title="移動白板">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
             </button>
-            <button type="button" class="tool-btn" data-tool="pen" title="畫筆（在白板上一起畫或算）">
+            <button type="button" class="tool-btn" data-tool="pen" title="畫筆">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
             </button>
-            <button type="button" class="tool-btn" data-tool="highlighter" title="螢光筆標記">
+            <button type="button" class="tool-btn" data-tool="highlighter" title="螢光筆">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l-6 6v3h9l3-3"/><path d="M22 12l-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>
             </button>
-            <button type="button" class="tool-btn" data-tool="laser" title="雷射筆（指給 AI 看）">
+            <button type="button" class="tool-btn" data-tool="laser" title="雷射筆">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
             </button>
-            <button type="button" class="tool-btn" data-tool="eraser" title="擦除我的筆跡">
+            <button type="button" class="tool-btn" data-tool="eraser" title="橡皮擦">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16c-.8-.8-.8-2 0-2.8L13.8 2.4c.8-.8 2-.8 2.8 0L21.6 7.4c.8.8.8 2 0 2.8L12 20"/></svg>
             </button>
 
             <span class="toolbar-divider"></span>
 
-            <button type="button" class="color-swatch active" data-color="#E85D3F" style="background:#E85D3F" title="珊瑚紅"></button>
-            <button type="button" class="color-swatch" data-color="#2E5BFF" style="background:#2E5BFF" title="鈷藍"></button>
-            <button type="button" class="color-swatch" data-color="#16A34A" style="background:#16A34A" title="翠綠"></button>
-            <button type="button" class="color-swatch" data-color="#1B1B1F" style="background:#1B1B1F" title="墨黑"></button>
+            <button type="button" class="color-swatch active" data-color="#0F766E" style="background:#0F766E" title="墨綠"></button>
+            <button type="button" class="color-swatch" data-color="#2563EB" style="background:#2563EB" title="海藍"></button>
+            <button type="button" class="color-swatch" data-color="#DC2626" style="background:#DC2626" title="紅筆"></button>
+            <button type="button" class="color-swatch" data-color="#182420" style="background:#182420" title="深黑"></button>
 
             <span class="toolbar-divider"></span>
 
             <button type="button" class="tool-btn" id="clear-student-btn" title="清除我的筆跡">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
             </button>
-            <button type="button" class="tool-btn" id="reset-zoom-btn" title="重設視角 (100%)">
+            <button type="button" class="tool-btn zoom-btn" id="reset-zoom-btn" title="重設縮放">
               <span id="zoom-readout">100%</span>
             </button>
           </div>
 
-          <!-- Interrupt Floating Button when AI is speaking -->
-          <button type="button" class="interrupt-fab hidden" id="interrupt-fab">
-            <span class="hand-icon">✋</span>
-            <span>等一下，我有問題！</span>
-          </button>
+          <div class="whiteboard-stage" id="whiteboard-stage">
+            <canvas id="ai-board-canvas"></canvas>
+            <canvas id="student-draw-canvas"></canvas>
+
+            <div id="ai-pen-cursor" class="ai-pen-cursor hidden" aria-hidden="true">
+              <div class="pen-nib"></div>
+              <span class="pen-label">書寫中</span>
+            </div>
+
+            <div class="board-status-pill" id="board-status-pill">
+              <span class="status-wave" id="status-wave"></span>
+              <span id="board-status-text">準備上課...</span>
+            </div>
+
+            <button type="button" class="interrupt-fab hidden" id="interrupt-fab">
+              <span>✋</span>
+              <span>等一下，這步沒懂！</span>
+            </button>
+          </div>
         </div>
 
         <!-- Bottom Playback & Step Bar -->
         <div class="playback-bar">
           <div class="playback-controls">
             <button type="button" class="step-ctrl-btn" id="prev-step-btn" title="上一步">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
             </button>
             <button type="button" class="play-pause-btn" id="play-pause-btn" title="播放 / 暫停">
-              <svg id="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-              <svg id="pause-icon" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <svg id="play-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              <svg id="pause-icon" class="hidden" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
             </button>
             <button type="button" class="step-ctrl-btn" id="next-step-btn" title="下一步">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
             </button>
-            <button type="button" class="step-ctrl-btn" id="replay-step-btn" title="重播這一步動畫">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <button type="button" class="step-ctrl-btn" id="replay-step-btn" title="重播這一步">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
             </button>
           </div>
 
           <div class="steps-timeline" id="steps-timeline"></div>
-
-          <div class="step-counter" id="step-counter">1 / 5</div>
+          <div class="step-counter" id="step-counter">1 / 3</div>
         </div>
       </section>
 
       <!-- Tutor Chat & Voice Sidebar -->
-      <aside class="tutor-sidebar" aria-label="AI 家教對話">
+      <aside class="tutor-sidebar" aria-label="學習對話區">
         <div class="sidebar-header">
           <div class="tutor-identity">
             <div class="tutor-avatar" id="tutor-avatar">
-              <span>Aha</span>
+              <span>師</span>
               <span class="speaking-ring"></span>
             </div>
             <div>
-              <div class="tutor-name">Aha 家教老師</div>
-              <div class="tutor-sub" id="tutor-sub-status">準備好為你講解</div>
+              <div class="tutor-name">小黑板輔導老師</div>
+              <div class="tutor-sub" id="tutor-sub-status">準備好開始講解</div>
             </div>
           </div>
-          <button type="button" class="mini-outline-btn" id="toggle-outline-btn">教案大綱</button>
+          <button type="button" class="mini-outline-btn" id="toggle-outline-btn">單元步驟</button>
         </div>
 
         <div class="lesson-outline-drawer hidden" id="lesson-outline-drawer"></div>
@@ -310,8 +334,8 @@
         <div class="chat-stream" id="chat-stream"></div>
 
         <div class="quick-prompts" id="quick-prompts">
-          <button type="button" class="quick-chip" data-ask="等一下，這一步為什麼會這樣？">✋ 這一步為什麼？</button>
-          <button type="button" class="quick-chip" data-ask="可以用更生活化的比喻再講一次嗎？">💡 換個比喻</button>
+          <button type="button" class="quick-chip" data-ask="等一下，這一步為什麼會這樣？">✋ 這步為什麼？</button>
+          <button type="button" class="quick-chip" data-ask="可以用國小國中聽得懂的比喻再講一次嗎？">💡 換個生活比喻</button>
           <button type="button" class="quick-chip" data-ask="請再重畫一次剛剛那步">✏️ 再畫一遍</button>
           <button type="button" class="quick-chip" data-ask="我聽懂了，繼續下一步吧！">👍 懂了，繼續</button>
         </div>
@@ -319,17 +343,17 @@
         <div class="chat-composer">
           <div id="chat-attachments" class="attachments-strip hidden"></div>
           <div class="chat-input-row">
-            <label class="chat-icon-btn" for="chat-file-input" title="上傳算式或題目圖片">
+            <label class="chat-icon-btn" for="chat-file-input" title="上傳題目照片">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <input id="chat-file-input" type="file" accept="image/*,.txt,.md" hidden />
             </label>
-            <button type="button" class="chat-icon-btn" id="chat-mic-btn" title="按住或點擊語音發問">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            <button type="button" class="chat-icon-btn" id="chat-mic-btn" title="語音提問">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
             </button>
             <input
               type="text"
               id="chat-input"
-              placeholder="隨時打斷發問，或輸入你的算式與想法..."
+              placeholder="有哪裡不懂隨時打字發問，或輸入算式..."
               autocomplete="off"
             />
             <button type="button" class="chat-send-btn" id="chat-send-btn" title="送出">
@@ -342,12 +366,11 @@
   </div>
 
   <!-- ==================== MODALS ==================== -->
-  <!-- Summary & Quiz Modal -->
   <div id="summary-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="summary-modal-title">
     <div class="modal-card modal-lg">
       <div class="modal-header">
         <div>
-          <span class="modal-eyebrow">課後收斂 · NOTES & QUIZ</span>
+          <span class="modal-eyebrow">課後收斂 · 筆記與練習</span>
           <h3 id="summary-modal-title">重點筆記與隨堂小測驗</h3>
         </div>
         <button type="button" class="icon-btn close-modal-btn" data-close="summary-modal">✕</button>
@@ -356,13 +379,12 @@
     </div>
   </div>
 
-  <!-- Settings Modal -->
   <div id="settings-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <span class="modal-eyebrow">AI ENGINE & VOICE</span>
-          <h3 id="settings-modal-title">AI 白板引擎與語音設定</h3>
+          <span class="modal-eyebrow">PERSONAL STUDY SETTINGS</span>
+          <h3 id="settings-modal-title">AI 模型與語音設定</h3>
         </div>
         <button type="button" class="icon-btn close-modal-btn" data-close="settings-modal">✕</button>
       </div>
@@ -370,28 +392,28 @@
         <div class="setting-group">
           <label class="setting-label">白板推演模式</label>
           <p class="setting-desc">
-            內建引擎已包含多學科動態教案、即時函數繪圖計算器與代數步驟檢查，無需任何 API Key 即可完整使用。若填入你自己的 Gemini 或 OpenAI API Key（僅存於本機瀏覽器），任何任意題目或上傳圖片都會由真實 AI 即時編寫教案並繪製白板！
+            內建國中小圖解引擎免任何設定即可使用（含分數圖、幾何拼圖、國中數學方程式引導與座標繪圖）。如需解析課本拍照或冷門題目，可選填個人 Gemini / OpenAI API Key（僅存於本機瀏覽器）。
           </p>
           <div class="engine-radio-group">
             <label class="engine-option">
               <input type="radio" name="ai-provider" value="builtin" checked />
               <div>
-                <strong>內建智慧教案引擎（免設定）</strong>
-                <small>支援精選課程、數學函數繪圖 y=f(x)、一元一次方程式蘇格拉底引導與離線追問。</small>
+                <strong>內建國中小圖解白板引擎（免設定）</strong>
+                <small>支援國小分數幾何、國中理化生物、數學座標繪圖與一次方程式逐步引導。</small>
               </div>
             </label>
             <label class="engine-option">
               <input type="radio" name="ai-provider" value="gemini" />
               <div>
-                <strong>Google Gemini API（BYOK）</strong>
-                <small>支援圖片/題目拍照辨識、任意學科即時生成白板繪圖腳本與對話。</small>
+                <strong>Google Gemini API（個人金鑰）</strong>
+                <small>支援拍下國中小考卷照片即時生成白板步驟。</small>
               </div>
             </label>
             <label class="engine-option">
               <input type="radio" name="ai-provider" value="openai" />
               <div>
-                <strong>OpenAI 相容 API（BYOK）</strong>
-                <small>可自訂 Base URL 與模型名稱（支援 GPT-4o / 本地 Ollama 等）。</small>
+                <strong>OpenAI 相容 API（個人金鑰）</strong>
+                <small>可自訂 Base URL 與模型名稱。</small>
               </div>
             </label>
           </div>
@@ -399,7 +421,7 @@
 
         <div id="api-key-fields" class="setting-group hidden">
           <label class="setting-label" for="api-key-input">API Key</label>
-          <input type="password" id="api-key-input" class="text-input" placeholder="貼上你的 API Key（僅存於瀏覽器 localStorage）" />
+          <input type="password" id="api-key-input" class="text-input" placeholder="貼上你的個人 API Key" />
 
           <div id="openai-extra-fields" class="extra-fields hidden">
             <label class="setting-label" for="api-base-input">Base URL</label>
@@ -421,13 +443,12 @@
     </div>
   </div>
 
-  <!-- History Modal -->
   <div id="history-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
     <div class="modal-card">
       <div class="modal-header">
         <div>
-          <span class="modal-eyebrow">MY LESSONS</span>
-          <h3 id="history-modal-title">最近上過的白板課堂</h3>
+          <span class="modal-eyebrow">STUDY LOG</span>
+          <h3 id="history-modal-title">最近複習過的單元</h3>
         </div>
         <button type="button" class="icon-btn close-modal-btn" data-close="history-modal">✕</button>
       </div>
@@ -435,21 +456,20 @@
     </div>
   </div>
 
-  <!-- URL Attach Modal -->
   <div id="url-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card modal-sm">
       <div class="modal-header">
-        <h3>匯入教材連結或筆記段落</h3>
+        <h3>貼上課文段落或筆記重點</h3>
         <button type="button" class="icon-btn close-modal-btn" data-close="url-modal">✕</button>
       </div>
       <div class="modal-body">
-        <label class="setting-label" for="url-modal-input">網址或教材標題</label>
-        <input type="text" id="url-modal-input" class="text-input" placeholder="例如：https://zh.wikipedia.org/wiki/牛頓運動定律" />
-        <label class="setting-label" for="url-notes-input" style="margin-top:12px;">或貼上重點文字（選填）</label>
-        <textarea id="url-notes-input" class="text-input" rows="4" placeholder="貼上課文段落或考卷範圍，AI 會以此備課..."></textarea>
+        <label class="setting-label" for="url-modal-input">單元標題或參考網址（選填）</label>
+        <input type="text" id="url-modal-input" class="text-input" placeholder="例如：國二自然 第三章 光與顏色" />
+        <label class="setting-label" for="url-notes-input" style="margin-top:12px;">課文內容或筆記文字</label>
+        <textarea id="url-notes-input" class="text-input" rows="4" placeholder="貼上想整理成白板的課文段落..."></textarea>
         <div class="modal-footer">
           <button type="button" class="secondary-btn close-modal-btn" data-close="url-modal">取消</button>
-          <button type="button" class="start-btn" id="confirm-url-btn">加入教材</button>
+          <button type="button" class="start-btn" id="confirm-url-btn">加入筆記</button>
         </div>
       </div>
     </div>

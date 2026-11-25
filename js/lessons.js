@@ -1,226 +1,262 @@
 /**
- * Curated Multi-Subject Interactive Whiteboard Lessons + Dynamic Math/Notes Lesson Builder.
+ * K-9 (國小 / 國中) Interactive Whiteboard Lessons + Dynamic Equation/Graph Builder.
  */
 const SUGGESTION_POOL = [
-  { id: 'projectile', subject: '物理', mode: 'topic', prompt: '踢出去的球為什麼會劃出一道弧線？' },
-  { id: 'derivative', subject: '數學', mode: 'topic', prompt: '導數到底是什麼意思？' },
-  { id: 'genetics', subject: '生物', mode: 'exam', prompt: '期中考複習：基因遺傳與血型（A＋B 也能生出 O 型嗎？）' },
-  { id: 'equation', subject: '數學', mode: 'homework', prompt: '解方程式：2x + 5 = 17' },
-  { id: 'moon', subject: '天文', mode: 'topic', prompt: '月亮為什麼會有陰晴圓缺？' },
-  { id: 'intersection', subject: '數學', mode: 'topic', prompt: '兩條直線 y = 2x + 1 和 y = -x + 4 在哪裡碰頭？' },
-  { id: 'catalyst', subject: '化學', mode: 'topic', prompt: '加一點催化劑，反應速率怎麼變？' },
-  { id: 'linear-hw', subject: '數學', mode: 'homework', prompt: '解方程式：3x - 4 = 14' },
+  { id: 'fraction-add', grade: 'elem', gradeLabel: '國小五年級', subject: '數學', mode: 'topic', prompt: '1/2 + 1/3 為什麼不能直接把分子和分母相加？' },
+  { id: 'triangle-area', grade: 'elem', gradeLabel: '國小五年級', subject: '數學', mode: 'topic', prompt: '三角形面積為什麼要「底 × 高 ÷ 2」？' },
+  { id: 'moon', grade: 'elem', gradeLabel: '國小四年級', subject: '自然', mode: 'topic', prompt: '月亮為什麼有時像香蕉、有時像大圓盤？' },
+  { id: 'elem-eq', grade: 'elem', gradeLabel: '國小六年級', subject: '數學', mode: 'homework', prompt: '解未知數：3x + 5 = 20' },
+  { id: 'pythagoras', grade: 'junior', gradeLabel: '國二數學', subject: '數學', mode: 'topic', prompt: '畢氏定理：直角三角形兩股 3 和 4，斜邊為什麼是 5？' },
+  { id: 'linear-hw', grade: 'junior', gradeLabel: '國一數學', subject: '數學', mode: 'homework', prompt: '解一元一次方程式：2x + 5 = 17' },
+  { id: 'genetics', grade: 'junior', gradeLabel: '國一生物', subject: '生物', mode: 'exam', prompt: '段考複習：A 型和 B 型爸媽也會生出 O 型小孩嗎？' },
+  { id: 'intersection', grade: 'junior', gradeLabel: '國一數學', subject: '數學', mode: 'topic', prompt: '兩條直線 y = 2x + 1 和 y = -x + 4 在哪裡交會？' },
+  { id: 'projectile', grade: 'junior', gradeLabel: '國三理化', subject: '理化', mode: 'topic', prompt: '水平丟出的球跟直接放手掉下的球，誰先落地？' },
+  { id: 'catalyst', grade: 'junior', gradeLabel: '國二理化', subject: '理化', mode: 'topic', prompt: '雙氧水加了二氧化錳（催化劑），反應為什麼變快？' },
 ];
 
 const CURATED_LESSONS = {
-  projectile: {
-    id: 'projectile',
-    title: '拋體運動：踢出去的球為什麼會劃出弧線？',
-    subject: '物理',
-    mode: 'topic',
-    steps: [
-      {
-        title: '1. 先看現象',
-        speech: '你問踢出去的球為什麼會劃出一道弧線？我們先把白板分成兩邊看：把球水平丟出去之後，其實「兩個運動」正在同時發生！',
-        draw: [
-          { type: 'title', x: 50, y: 58, text: '拋體運動 Projectile Motion', size: 28, underline: true },
-          { type: 'box', x: 560, y: 120, w: 380, h: 125, fill: '#EEF3FF', color: '#2E5BFF', label: '核心直覺：兩個運動同時發生' },
-          { type: 'text', x: 582, y: 182, text: '① 水平方向：往前等速移動', size: 17, color: '#1B1B1F' },
-          { type: 'text', x: 582, y: 216, text: '② 垂直方向：重力一直往下拉', size: 17, color: '#E85D3F' },
-        ],
-      },
-      {
-        title: '2. 思想實驗 A vs B',
-        speech: '來猜一個經典問題！桌邊有兩顆一樣的球：A 直接放手讓它垂直落下，B 同時用力往水平方向丟出去。你猜誰會先落地？',
-        draw: [
-          { type: 'projectileDemo', x: 50, y: 120, w: 470, h: 370, showForces: false },
-          { type: 'box', x: 560, y: 270, w: 380, h: 105, fill: '#FFF7F4', color: '#E85D3F', label: '猜猜看：誰先落地？' },
-          { type: 'text', x: 582, y: 332, text: 'A 直接放手 vs B 水平丟出（同高度）', size: 16, color: '#53535D' },
-        ],
-      },
-      {
-        title: '3. 畫出力圖揭曉答案',
-        speech: '答案是：它們會同時落地！看看白板上的力圖：球離開手之後，並沒有往前的推力在推它了，只剩下向下的重力 g 作用在兩顆球上，所以它們下墜的高度在每一秒都一模一樣。',
-        draw: [
-          { type: 'projectileDemo', x: 50, y: 120, w: 470, h: 370, showForces: true },
-          { type: 'box', x: 560, y: 395, w: 380, h: 145, fill: '#ECFDF3', color: '#16A34A', label: '✓ 同時落地！原因在受力' },
-          { type: 'text', x: 582, y: 454, text: '丟出後：沒有往前的推力！', size: 17, color: '#B42318' },
-          { type: 'text', x: 582, y: 486, text: '只有重力往下拉 → 垂直加速度都是 g', size: 16, color: '#1B1B1F' },
-          { type: 'text', x: 582, y: 518, text: '丟得越快 = 落得越遠，但落地時間不變', size: 15, color: '#16A34A' },
-        ],
-      },
-      {
-        title: '4. 數學推導總結',
-        speech: '寫成公式超簡單：水平距離 x 等於初速度乘時間，垂直掉落高度 y 等於二分之一 gt 平方。把 t 消掉後，y 就正比於 x 平方，這正是一條標準的拋物線！',
-        draw: [
-          { type: 'box', x: 50, y: 515, w: 890, h: 78, fill: '#FFFFFF', color: '#1B1B1F' },
-          { type: 'text', x: 75, y: 550, text: '水平：x = v₀ · t       垂直：y = ½ g t²', size: 18, mono: true, color: '#2E5BFF' },
-          { type: 'text', x: 75, y: 578, text: '消去 t 得軌跡：y = (g / 2v₀²) · x²  →  標準拋物線！', size: 17, mono: true, color: '#E85D3F' },
-        ],
-      },
-    ],
-    faq: {
-      why: {
-        reply: '好問題！為什麼往水平丟不會拖慢它掉下來的時間？因為力與運動在「垂直」和「水平」兩個互相垂直的方向上是獨立的（運動獨立性）。水平初速度不會產生任何向上或向下的分力，拉它往下掉的永遠只有重力！',
-        callout: { type: 'callout', bx: 565, by: 265, targetX: 280, targetY: 270, text: '水平與垂直運動互相獨立！' },
-      },
-      analogy: {
-        reply: '想像你在等速前進的火車上放手讓蘋果掉落：對車內的你來說蘋果是直直掉下去，但對站在月台的人看來，蘋果一邊跟著火車往前跑、一邊往下掉，所以軌跡就是一條弧線！兩者落地時間完全一樣。',
-      },
-    },
-    notes: [
-      '拋體運動可以拆解為「水平等速運動」與「垂直自由落體」同時進行。',
-      '物體離開手或腳之後，不再受到往前的推力（忽略空氣阻力時，只受重力作用）。',
-      '在同一高度水平丟出的物體，不管初速度多快，落地時間都與自由落體相同。',
-    ],
-    pitfall: '常見誤區：誤以為「丟得越快，球會飛比較久才落地」。其實丟得越快只是水平飛得越遠，落地時間只取決於高度！',
-    quiz: [
-      {
-        q: '從同一張桌面，A 球自由落下，B 球以更快的速度水平射出（忽略空氣阻力），誰先落地？',
-        options: ['A 球先落地', 'B 球先落地', '兩球同時落地'],
-        answer: 2,
-        explain: '兩球垂直方向的初速度都是 0，且只受相同重力加速度 g，高度相同故落地時間相同。',
-      },
-      {
-        q: '籃球出手飛在半空中最高點時，還受到哪個方向的推力？',
-        options: ['向前的推力與向下的重力', '只有向下的重力（不計空氣阻力）', '完全不受任何力'],
-        answer: 1,
-        explain: '球一旦離開手，原本的推力就消失了；它在空中靠慣性繼續前進，受力只有重力。',
-      },
-      {
-        q: '如果把水平拋出的初速度變成原來的 2 倍，落地時間與水平射程各會怎麼變？',
-        options: ['時間不變，射程變 2 倍', '時間變 2 倍，射程變 4 倍', '時間變一半，射程不變'],
-        answer: 0,
-        explain: '落地時間只跟高度有關（不變）；水平射程 x = v₀t，所以初速度加倍、射程變 2 倍。',
-      },
-    ],
-  },
-
-  derivative: {
-    id: 'derivative',
-    title: '導數到底是什麼意思？從割線到瞬時斜率',
+  'fraction-add': {
+    id: 'fraction-add',
+    title: '異分母分數加法：為什麼 1/2 + 1/3 不是 2/5？',
+    gradeLabel: '國小五年級',
     subject: '數學',
     mode: 'topic',
     steps: [
       {
-        title: '1. 先畫出曲線',
-        speech: '很多人背了一堆微分公式，卻不知道導數到底是什麼。其實一句話：導數就是曲線在「某一點」的瞬間斜率！我們先在白板算出並畫出 y 等於 x 平方的曲線。',
+        title: '1. 先畫出兩條一樣長的蛋糕',
+        speech: '很多同學看到二分之一加三分之一，會不小心把分子加分子、分母加分母變成五分之二！我們把兩條一樣長的蛋糕畫在白板上：左邊切 2 塊取 1 塊，右邊切 3 塊取 1 塊，每一塊大小根本不一樣，不能直接加！',
         draw: [
-          { type: 'title', x: 50, y: 58, text: '導數的幾何意義：瞬間變化率', size: 27, underline: true },
-          {
-            type: 'functionPlot',
-            x: 55, y: 105, w: 460, h: 430,
-            xMin: -1.5, xMax: 3.5, yMin: -1, yMax: 9,
-            curves: [{ expr: 'x*x', color: '#2E5BFF', width: 3.2, label: 'f(x) = x²', labelX: 2.1 }],
-            points: [{ x: 1, y: 1, color: '#E85D3F', label: 'P(1, 1)' }],
-          },
-          { type: 'box', x: 550, y: 120, w: 390, h: 120, fill: '#EEF3FF', color: '#2E5BFF', label: '我們想知道的問題' },
-          { type: 'text', x: 572, y: 185, text: '在點 P(1, 1) 的那一瞬間，', size: 17 },
-          { type: 'text', x: 572, y: 215, text: '這條曲線到底有多「陡」？', size: 17, color: '#E85D3F' },
+          { type: 'title', x: 50, y: 58, text: '異分母分數加法：1/2 + 1/3', size: 28, underline: true, underlineColor: '#0F766E' },
+          { type: 'fractionBars', x: 55, y: 150, w: 420, splitToSix: false },
+          { type: 'box', x: 535, y: 130, w: 405, h: 170, fill: '#FEF2F2', color: '#DC2626', label: '✗ 常見陷阱：不能直接相加！' },
+          { type: 'text', x: 558, y: 192, text: '1/2 的每一塊比較大，1/3 的每一塊比較小', size: 16 },
+          { type: 'text', x: 558, y: 226, text: '大小不同，直接寫 2/5 一定錯！', size: 16, color: '#DC2626' },
+          { type: 'text', x: 558, y: 262, text: '解法：想辦法切成「一樣大小的小塊」', size: 16, color: '#0F766E' },
         ],
       },
       {
-        title: '2. 拿兩點連線（割線）',
-        speech: '要算斜率需要兩個點，對吧？我們先在旁邊找一點 Q，橫坐標是 1 加上 Δx。把 P 和 Q 連起來的這條虛線叫做割線，它的斜率就是平均變化率。',
+        title: '2. 通分：全部切成 6 等分',
+        speech: '2 和 3 的最小公倍數是 6！我們用細刀把原本 2 份的再各切 3 刀、原本 3 份的再各切 2 刀，兩條就都變成「6 等分」了！現在 1/2 變成 3/6，1/3 變成 2/6，每一小塊一樣大，合起來就是六分之五！',
         draw: [
-          {
-            type: 'functionPlot',
-            x: 55, y: 105, w: 460, h: 430,
-            xMin: -1.5, xMax: 3.5, yMin: -1, yMax: 9,
-            curves: [
-              { expr: 'x*x', color: '#2E5BFF', width: 3.2, label: 'f(x) = x²', labelX: 2.1 },
-              { expr: '3*x - 2', color: '#D97706', width: 2.4, dashed: true, label: '割線 Δx=1', labelX: 1.9 },
-            ],
-            points: [
-              { x: 1, y: 1, color: '#E85D3F', label: 'P(1,1)' },
-              { x: 2, y: 4, color: '#D97706', label: 'Q(2,4)' },
-            ],
-          },
-          { type: 'box', x: 550, y: 265, w: 390, h: 140, fill: '#FFFBEB', color: '#D97706', label: '割線斜率（平均變化）' },
-          { type: 'text', x: 572, y: 325, text: '斜率 = Δy / Δx = (f(1+Δx) - f(1)) / Δx', size: 15, mono: true },
-          { type: 'text', x: 572, y: 360, text: '當 Δx = 1 時：(4 - 1) / (2 - 1) = 3', size: 16, mono: true, color: '#D97706' },
-          { type: 'text', x: 572, y: 390, text: '還不夠準，因為 Q 離 P 太遠了！', size: 15, color: '#53535D' },
-        ],
-      },
-      {
-        title: '3. 讓 Δx 逼近 0（切線）',
-        speech: '現在把 Q 沿著曲線一直往 P 推近，讓 Δx 越來越小、逼近 0！這條割線就會貼上曲線，變成只在 P 點擦過去的「切線」。算出來的極限斜率剛好是 2！',
-        draw: [
-          {
-            type: 'functionPlot',
-            x: 55, y: 105, w: 460, h: 430,
-            xMin: -1.5, xMax: 3.5, yMin: -1, yMax: 9,
-            curves: [
-              { expr: 'x*x', color: '#2E5BFF', width: 3.2, label: 'f(x) = x²', labelX: 2.1 },
-              { expr: '2*x - 1', color: '#E85D3F', width: 3, label: '切線斜率 = 2', labelX: 1.7 },
-            ],
-            points: [{ x: 1, y: 1, color: '#E85D3F', label: "P(1,1), f'(1)=2" }],
-          },
-          { type: 'box', x: 550, y: 425, w: 390, h: 150, fill: '#FFF4F1', color: '#E85D3F', label: '導數 f\'(x) 的定義' },
-          { type: 'text', x: 572, y: 482, text: '((1+Δx)² - 1) / Δx = 2 + Δx', size: 16, mono: true },
-          { type: 'text', x: 572, y: 516, text: '當 Δx → 0 ：斜率極限 = 2 ！', size: 17, mono: true, color: '#E85D3F' },
-          { type: 'text', x: 572, y: 548, text: '一般來說：(x²)′ = 2x', size: 17, mono: true, color: '#16A34A' },
+          { type: 'fractionBars', x: 55, y: 150, w: 420, splitToSix: true },
+          { type: 'box', x: 535, y: 325, w: 405, h: 195, fill: '#ECFDF5', color: '#0F766E', label: '✓ 通分步驟（找最小公倍數 6）' },
+          { type: 'text', x: 558, y: 386, text: '1/2 = (1×3) / (2×3) = 3/6', size: 18, mono: true, color: '#0F766E' },
+          { type: 'text', x: 558, y: 424, text: '1/3 = (1×2) / (3×2) = 2/6', size: 18, mono: true, color: '#2563EB' },
+          { type: 'text', x: 558, y: 468, text: '3/6 ＋ 2/6 ＝ 5/6', size: 22, mono: true, color: '#D97706' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: '為什麼不能一開始就直接代入 Δx = 0？因為分母是 Δx，直接代 0 會變成 0/0 沒有意義！所以我們必須先做代數化簡（把分子的 Δx 約掉，剩下 2 + Δx），最後才讓 Δx 趨近於 0。',
-        callout: { type: 'callout', bx: 555, by: 410, targetX: 295, targetY: 420, text: '先約分掉 Δx，再令 Δx→0！' },
+        reply: '因為分母代表「一條蛋糕總共切幾等分」，只有分母相同時，每一小塊的大小才一樣，這時候分子（有幾塊）才能直接相加喔！',
+        callout: { type: 'callout', bx: 535, by: 530, targetX: 250, targetY: 390, text: '分母一樣＝每一小塊一樣大！' },
       },
       analogy: {
-        reply: '這就像開車時的「平均時速」跟「時速表數字」的差別！台北到台中花 2 小時是平均速度（割線），但你看一眼儀表板顯示「時速 108 公里」，那就是這一瞬間的導數（切線斜率）。',
+        reply: '就像 1 張五百元鈔票加 1 枚十元硬幣，不能說等於 2 元！要先通通換成「十元」當單位，變成 50 個十元 + 1 個十元 = 51 個十元。',
       },
     },
     notes: [
-      '導數 f′(a) 的幾何意義，就是函數圖形在 x = a 那一點的切線斜率。',
-      '割線代表兩點間的「平均變化率」；當 Δx → 0 取極限，割線就變成切線，得到「瞬時變化率」。',
-      '對 f(x) = x² 而言，任意點 x 的導函數為 f′(x) = 2x。',
+      '異分母分數相加或相減前，必須先「通分」，讓分母變得一樣。',
+      '通分時找出兩個分母的最小公倍數當作新分母，分子與分母要同乘以相同的數（擴分）。',
+      '分母相同後，只把「分子相加」，分母維持不變。',
     ],
-    pitfall: '常見易錯：把「函數值 f(1)=1」和「導數值 f′(1)=2」搞混。前者是點的高度，後者是該點的坡度（斜率）。',
+    pitfall: '大魔王錯法：寫成 1/2 + 1/3 = 2/5。記住！1/2 本身就已經是 0.5 了，2/5 只有 0.4，越加反而越小就不合理囉！',
     quiz: [
+      { q: '計算 1/3 + 1/4 時，最適合先通分成幾分之幾？', options: ['分母 7', '分母 12', '分母 34'], answer: 1, explain: '3 和 4 的最小公倍數是 12，通分後為 4/12 + 3/12 = 7/12。' },
+      { q: '將 1/2 擴分成分母為 6 的分數，分子應該變成多少？', options: ['1', '3', '6'], answer: 1, explain: '分母 2 乘以 3 變成 6，分子 1 也要乘以 3 變成 3。' },
+      { q: '3/8 + 2/8 的答案是多少？', options: ['5/16', '5/8', '6/8'], answer: 1, explain: '同分母相加時，分母不變，分子 3 + 2 = 5。' },
+    ],
+  },
+
+  'triangle-area': {
+    id: 'triangle-area',
+    title: '國小幾何：三角形面積為什麼要「底 × 高 ÷ 2」？',
+    gradeLabel: '國小五年級',
+    subject: '數學',
+    mode: 'topic',
+    steps: [
       {
-        q: '對 f(x) = x² 來說，在 x = 3 這一點的切線斜率 f′(3) 是多少？',
-        options: ['9', '6', '3'],
-        answer: 1,
-        explain: '因為 f′(x) = 2x，代入 x = 3 得到斜率為 2 × 3 = 6。',
+        title: '1. 先畫一個三角形並標出底與高',
+        speech: '我們常常背口訣「底乘以高除以二」，但為什麼最後一定要除以 2 呢？先在方格紙上畫出一個三角形，底是 b、垂直高度是 h。',
+        draw: [
+          { type: 'title', x: 50, y: 58, text: '三角形面積公式的秘密：底 × 高 ÷ 2', size: 27, underline: true, underlineColor: '#0F766E' },
+          { type: 'triangleAreaDemo', x: 75, y: 165, showCopy: false },
+          { type: 'box', x: 530, y: 150, w: 410, h: 155, fill: '#ECFDF5', color: '#0F766E', label: '① 先認識底和高' },
+          { type: 'text', x: 552, y: 212, text: '• 底 (b)：三角形最下面的邊長', size: 16.5 },
+          { type: 'text', x: 552, y: 248, text: '• 高 (h)：從頂點垂直畫到底的距離', size: 16.5, color: '#DC2626' },
+          { type: 'text', x: 552, y: 282, text: '問問看：只用「底 × 高」會算出誰？', size: 16, color: '#485A52' },
+        ],
       },
       {
-        q: '計算導數時，為什麼是「割線」逼近「切線」？',
-        options: ['因為單靠一個點無法直接相減算斜率', '因為曲線沒有斜率', '為了讓分母等於零'],
-        answer: 0,
-        explain: '斜率定義需要兩點座標相減，因此先取鄰近點形成割線，再讓距離 Δx → 0。',
+        title: '2. 複製一個倒過來拼在一起！',
+        speech: '魔法來了！把一模一樣的三角形複製一個、倒過來拼在右邊，兩個三角形剛好合體成一個完整的「平行四邊形」！平行四邊形面積就是底乘以高，那原本的一個三角形，當然就是它的一半，所以要除以 2！',
+        draw: [
+          { type: 'triangleAreaDemo', x: 75, y: 165, showCopy: true },
+          { type: 'box', x: 530, y: 330, w: 410, h: 205, fill: '#EFF6FF', color: '#2563EB', label: '② 兩塊拼成平行四邊形' },
+          { type: 'text', x: 552, y: 392, text: '2 個相同三角形 ＝ 1 個平行四邊形', size: 16.5 },
+          { type: 'text', x: 552, y: 428, text: '平行四邊形面積 ＝ 底 × 高', size: 17, mono: true, color: '#2563EB' },
+          { type: 'text', x: 552, y: 472, text: '1 個三角形面積 ＝ 底 × 高 ÷ 2', size: 19, mono: true, color: '#0F766E' },
+        ],
+      },
+    ],
+    faq: {
+      why: {
+        reply: '因為任何一個三角形，只要拿另一塊完全一樣的倒過來接上去，一定能拼出底和高都相同的平行四邊形（或長方形）！所以一個三角形永遠剛好占「底×高」的一半。',
+        callout: { type: 'callout', bx: 530, by: 545, targetX: 290, targetY: 250, text: '綠＋藍剛好＝整個平行四邊形！' },
+      },
+      analogy: {
+        reply: '就像拿一張長方形吐司斜斜對切一刀，會變成兩片一樣大的直角三角形！整片吐司是底×高，其中一片三角形當然要除以 2。',
+      },
+    },
+    notes: [
+      '兩個完全相同的三角形，可以拼成一個「底相同、高相同」的平行四邊形。',
+      '平行四邊形面積 = 底 × 高，因此三角形面積 = 底 × 高 ÷ 2。',
+      '算面積時「高」一定要跟「底」互相垂直（形成直角）。',
+    ],
+    pitfall: '最常錯：忘記除以 2，或是找錯「高」（拿斜邊的長度當作高來乘）。',
+    quiz: [
+      { q: '一個三角形的底是 10 公分、高是 6 公分，它的面積是多少平方公分？', options: ['60', '30', '16'], answer: 1, explain: '10 × 6 ÷ 2 = 30 平方公分。' },
+      { q: '為什麼算三角形面積最後要「除以 2」？', options: ['因為三角形只有兩條邊', '因為兩個相同的三角形才能拼成一個底×高的平行四邊形', '因為數字太大要變小'], answer: 1, explain: '一個三角形剛好是同底同高平行四邊形面積的一半。' },
+      { q: '如果三角形面積是 24 平方公分，底是 8 公分，高是多少公分？', options: ['3 公分', '6 公分', '12 公分'], answer: 1, explain: '先把面積乘以 2 還原成平行四邊形 (48)，再除以底 8，得到高為 6 公分。' },
+    ],
+  },
+
+  pythagoras: {
+    id: 'pythagoras',
+    title: '國二數學：畢氏定理（3² + 4² 為什麼等於 5²？）',
+    gradeLabel: '國二數學',
+    subject: '數學',
+    mode: 'topic',
+    steps: [
+      {
+        title: '1. 先看直角三角形的三條邊',
+        speech: '在直角三角形裡，夾住直角的那兩條比較短的邊叫做「股」，對面最長的那條叫做「斜邊」。如果兩股分別是 3 和 4，為什麼斜邊剛好是 5，而不是 3 加 4 等於 7 呢？',
+        draw: [
+          { type: 'title', x: 50, y: 58, text: '畢氏定理（商高定理）：a² + b² = c²', size: 27, underline: true, underlineColor: '#0F766E' },
+          { type: 'pythagorasDemo', x: 185, y: 340, showSquares: false },
+          { type: 'box', x: 515, y: 135, w: 425, h: 165, fill: '#F2F6F4', color: '#182420', label: '直角三角形的邊長名稱' },
+          { type: 'text', x: 538, y: 198, text: '• 兩股 (a, b)：夾出 90° 直角的兩條短邊', size: 16 },
+          { type: 'text', x: 538, y: 234, text: '• 斜邊 (c)：直角對面最長的邊', size: 16, color: '#D97706' },
+          { type: 'text', x: 538, y: 270, text: '注意：邊長不能直接相加 (3 + 4 ≠ c)', size: 15.5, color: '#DC2626' },
+        ],
       },
       {
-        q: '如果車子的位置函數是 s(t)，那麼它的導數 s′(t) 代表什麼物理量？',
-        options: ['總路程', '瞬時速度', '質量'],
-        answer: 1,
-        explain: '位置對時間的瞬時變化率，就是瞬時速度。',
+        title: '2. 把三條邊往外長出正方形！',
+        speech: '秘密藏在「面積」裡！我們在三條邊的外面各自畫出正方形：邊長 3 的正方形面積是 9，邊長 4 的正方形面積是 16。神奇的事情發生了：9 加 16 剛好等於 25，也就是斜邊正方形 5 的平方！',
+        draw: [
+          { type: 'pythagorasDemo', x: 185, y: 340, showSquares: true },
+          { type: 'box', x: 515, y: 325, w: 425, h: 210, fill: '#ECFDF5', color: '#0F766E', label: '★ 核心公式：兩股平方和 ＝ 斜邊平方' },
+          { type: 'text', x: 538, y: 386, text: '綠色面積 (3²) ＋ 藍色面積 (4²) ＝ 橘色面積 (c²)', size: 15.5 },
+          { type: 'text', x: 538, y: 426, text: '9 ＋ 16 ＝ 25 ＝ 5²', size: 20, mono: true, color: '#0F766E' },
+          { type: 'text', x: 538, y: 468, text: '所以斜邊 c ＝ √25 ＝ 5 ！', size: 19, mono: true, color: '#D97706' },
+          { type: 'text', x: 538, y: 504, text: '必背常見直角三角形組：(3,4,5)、(5,12,13)、(8,15,17)', size: 13.5, color: '#485A52' },
+        ],
       },
+    ],
+    faq: {
+      why: {
+        reply: '只有「直角三角形」才成立喔！當角度剛好是 90 度時，兩股各自平方的面積總和才會精準等於斜邊的平方面積。',
+        callout: { type: 'callout', bx: 515, by: 545, targetX: 195, targetY: 330, text: '一定要有 90° 直角才能套用！' },
+      },
+      analogy: {
+        reply: '想像兩塊正方形草皮（面積 9 坪和 16 坪），把它們的所有草皮全部鋪到斜邊那塊大正方形地基上，不多不少剛好鋪滿 25 坪！',
+      },
+    },
+    notes: [
+      '在直角三角形中，兩股平方和等於斜邊平方：a² + b² = c²（c 為斜邊）。',
+      '已知斜邊 c 與一股 a 時，求另一股要用減法：b = √(c² - a²)。',
+      '國二段考超常見比例：(3, 4, 5)、(6, 8, 10)、(5, 12, 13)、(7, 24, 25)、(8, 15, 17)。',
+    ],
+    pitfall: '超級常錯：題目給「斜邊 13、一股 5」，學生沒看清楚直接套 13² + 5²！記得最長的斜邊永遠放在等號單獨那一邊！',
+    quiz: [
+      { q: '直角三角形的兩股長分別為 5 和 12，斜邊長是多少？', options: ['17', '13', '7'], answer: 1, explain: '5² + 12² = 25 + 144 = 169 = 13²，故斜邊為 13。' },
+      { q: '若直角三角形的斜邊是 10、其中一股是 6，另一股是多少？', options: ['8', '16', '4'], answer: 0, explain: '另一股為 √(10² - 6²) = √(100 - 36) = √64 = 8。' },
+      { q: '下列哪一組邊長「不能」圍成直角三角形？', options: ['3, 4, 5', '5, 12, 13', '2, 3, 4'], answer: 2, explain: '2² + 3² = 13，不等於 4² (16)，故不是直角三角形。' },
+    ],
+  },
+
+  projectile: {
+    id: 'projectile',
+    title: '國三理化：水平丟出 vs 直接放手，誰先落地？',
+    gradeLabel: '國三理化',
+    subject: '理化',
+    mode: 'topic',
+    steps: [
+      {
+        title: '1. 先看生活中的現象',
+        speech: '你問水平丟出去的球跟直接放手掉下去的球，誰先落地？在白板上我們同時看兩個運動：往前等速移動，跟往下受到重力加速掉落。',
+        draw: [
+          { type: 'title', x: 50, y: 58, text: '平拋運動與自由落體比較', size: 27, underline: true, underlineColor: '#0F766E' },
+          { type: 'box', x: 560, y: 120, w: 380, h: 125, fill: '#ECFDF5', color: '#0F766E', label: '先掌握兩個方向互相獨立' },
+          { type: 'text', x: 582, y: 182, text: '① 水平方向：只靠慣性往前跑', size: 17 },
+          { type: 'text', x: 582, y: 216, text: '② 垂直方向：地球重力一直往下拉', size: 17, color: '#DC2626' },
+        ],
+      },
+      {
+        title: '2. 桌邊兩顆球實驗',
+        speech: '想像桌邊有 A、B 兩顆一模一樣的球：A 直接放手，B 往水平用力推出去。仔細看白板動畫，你猜誰先碰到地板？',
+        draw: [
+          { type: 'projectileDemo', x: 50, y: 120, w: 470, h: 370, showForces: false },
+          { type: 'box', x: 560, y: 270, w: 380, h: 105, fill: '#FFFBEB', color: '#D97706', label: '猜猜看：誰先落地？' },
+          { type: 'text', x: 582, y: 332, text: 'A 直接放手 vs B 水平丟出（同高度）', size: 16, color: '#485A52' },
+        ],
+      },
+      {
+        title: '3. 畫出受力揭曉答案',
+        speech: '答案是「同時落地」！因為離開手之後，並沒有往前的推力推它了，兩顆球在垂直方向受到的重力一模一樣，所以每一秒鐘下降的高度完全相同！',
+        draw: [
+          { type: 'projectileDemo', x: 50, y: 120, w: 470, h: 370, showForces: true },
+          { type: 'box', x: 560, y: 395, w: 380, h: 145, fill: '#EFF6FF', color: '#2563EB', label: '✓ 同時落地！原因在受力' },
+          { type: 'text', x: 582, y: 454, text: '離開手後：沒有往前的推力！', size: 17, color: '#DC2626' },
+          { type: 'text', x: 582, y: 486, text: '只有重力往下拉 → 落地時間相同', size: 16 },
+          { type: 'text', x: 582, y: 518, text: '推得越快 ＝ 飛得越遠，但時間不變', size: 15, color: '#0F766E' },
+        ],
+      },
+    ],
+    faq: {
+      why: {
+        reply: '水平方向的速度不會幫球抵抗地心引力！垂直向下掉多快，只跟高度和重力加速度 g 有關，所以兩顆球在每一瞬間的高度都一樣高。',
+        callout: { type: 'callout', bx: 565, by: 265, targetX: 280, targetY: 270, text: '水平與垂直方向互不干擾！' },
+      },
+      analogy: {
+        reply: '就像在平穩行駛的高鐵車廂裡讓橡皮擦掉到地上：對車外月台的人看來橡皮擦走弧線，對你來說直直掉落，但落地花的時間一模一樣！',
+      },
+    },
+    notes: [
+      '忽略空氣阻力時，平拋運動可拆成「水平等速」與「垂直自由落體」。',
+      '同高度同時放手與水平拋出的物體，一定會同時落地。',
+      '水平初速度越大，飛行的水平距離越遠，但滯空時間不變。',
+    ],
+    pitfall: '理化常考陷阱：問「球飛在空中時受到幾個力？」記得離手後原本推它的力就沒了，只剩重力（若不計空氣阻力）。',
+    quiz: [
+      { q: '同一高度，A 球自由落下、B 球水平射出（不計空氣阻力），誰先著地？', options: ['A 球', 'B 球', '同時著地'], answer: 2, explain: '垂直方向初速皆為 0 且加速度皆為 g，故同時著地。' },
+      { q: '把水平射出的速度提高成 2 倍，落地時間會怎麼變？', options: ['不變', '變成 2 倍', '變成一半'], answer: 0, explain: '落地時間只取決於高度，與水平速度無關。' },
+      { q: '球離開手飛在空中時，還受到手給它的水平推力嗎？', options: ['有，一直推到落地', '沒有，離手後只受重力', '在最高點才沒有'], answer: 1, explain: '球靠慣性繼續前進，接觸結束後推力就消失了。' },
     ],
   },
 
   genetics: {
     id: 'genetics',
-    title: '考前串講：血型遺傳與棋盤方格法（A+B 也能生出 O 嗎？）',
+    title: '國一生物：血型遺傳與棋盤方格法',
+    gradeLabel: '國一生物',
     subject: '生物',
     mode: 'exam',
     steps: [
       {
-        title: '1. 基因與對偶基因',
-        speech: '明天要考遺傳章節，我們把最愛考的「血型遺傳」從頭串一遍！人類 ABO 血型是由一對對偶基因決定的，其中 Iᴬ 和 Iᴮ 是顯性，小寫 i 是隱性。',
+        title: '1. 認識顯性與隱性基因',
+        speech: '國一下生物段考必考 ABO 血型遺傳！人類血型由一對等位基因決定，其中 Iᴬ 和 Iᴮ 是顯性，小寫 i 是隱性，只有兩個都是 i 才會表現出 O 型。',
         draw: [
-          { type: 'title', x: 50, y: 58, text: '備考重點：ABO 血型遺傳與棋盤方格', size: 26, underline: true },
-          { type: 'box', x: 55, y: 110, w: 420, h: 195, fill: '#EEF3FF', color: '#2E5BFF', label: '① 基因型 vs 表現型對照' },
+          { type: 'title', x: 50, y: 58, text: '段考必考：ABO 血型棋盤方格法', size: 26, underline: true, underlineColor: '#0F766E' },
+          { type: 'box', x: 55, y: 110, w: 420, h: 195, fill: '#EFF6FF', color: '#2563EB', label: '① 基因型與血型對照表' },
           { type: 'text', x: 80, y: 170, text: 'A 型：IᴬIᴬ 或 Iᴬi', size: 18, mono: true },
           { type: 'text', x: 80, y: 205, text: 'B 型：IᴮIᴮ 或 Iᴮi', size: 18, mono: true },
-          { type: 'text', x: 80, y: 240, text: 'AB型：IᴬIᴮ （共顯性）', size: 18, mono: true, color: '#2E5BFF' },
-          { type: 'text', x: 80, y: 275, text: 'O 型：ii （必須兩個隱性）', size: 18, mono: true, color: '#E85D3F' },
+          { type: 'text', x: 80, y: 240, text: 'AB型：IᴬIᴮ （兩者都表現）', size: 18, mono: true, color: '#2563EB' },
+          { type: 'text', x: 80, y: 275, text: 'O 型：ii （必須兩個隱性）', size: 18, mono: true, color: '#DC2626' },
         ],
       },
       {
-        title: '2. 畫棋盤方格法',
-        speech: '關鍵陷阱來了：爸爸是 A 型、媽媽是 B 型，有沒有可能生出 O 型小孩？如果爸媽剛好都帶有隱性基因 i（也就是 Iᴬi 和 Iᴮi），我們畫出棋盤方格一格一格配對看看！',
+        title: '2. 畫棋盤方格算機率',
+        speech: '如果爸爸是 A 型（Iᴬi）、媽媽是 B 型（Iᴮi），我們畫出棋盤方格一格一格配對！你看右下角那一格剛好兩個 i 碰在一起，所以有四分之一（25%）的機率生出 O 型小孩！',
         draw: [
           {
             type: 'punnettSquare',
@@ -233,213 +269,156 @@ const CURATED_LESSONS = {
             ],
             highlightRow: 1, highlightCol: 1,
           },
-          { type: 'box', x: 55, y: 335, w: 420, h: 170, fill: '#FFF4F1', color: '#E85D3F', label: '② 考題高頻易錯點！' },
-          { type: 'text', x: 78, y: 398, text: 'A 型 (Iᴬi) × B 型 (Iᴮi)', size: 18, color: '#1B1B1F' },
-          { type: 'text', x: 78, y: 434, text: '四種血型 A、B、AB、O 都有可能！', size: 17, color: '#E85D3F' },
-          { type: 'text', x: 78, y: 468, text: '生出 O 型 (ii) 的機率 = 1/4 = 25%', size: 17, color: '#16A34A' },
-        ],
-      },
-      {
-        title: '3. 考前快速記憶口訣',
-        speech: '考前把這句口訣記起來：只有父母雙方各能拿出一個小寫 i，小孩才有機會出現隱性 O 型。如果其中一方是 AB 型（基因型 IᴬIᴮ，沒有 i），就絕不可能生出 O 型小孩！',
-        draw: [
-          { type: 'box', x: 55, y: 525, w: 885, h: 72, fill: '#ECFDF3', color: '#16A34A' },
-          { type: 'text', x: 80, y: 568, text: '✓ 必考口訣：雙親都有 i 才生得出 O 型；父母有一方是 AB 型，不可能生出 O 型！', size: 17, color: '#0F5132' },
+          { type: 'box', x: 55, y: 335, w: 420, h: 170, fill: '#FFFBEB', color: '#D97706', label: '② 段考高頻陷阱題！' },
+          { type: 'text', x: 78, y: 398, text: 'A 型 (Iᴬi) × B 型 (Iᴮi)', size: 18 },
+          { type: 'text', x: 78, y: 434, text: '四種血型 A、B、AB、O 都有可能！', size: 17, color: '#DC2626' },
+          { type: 'text', x: 78, y: 468, text: '生出 O 型 (ii) 機率 ＝ 1/4 ＝ 25%', size: 17, color: '#0F766E' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: '因為血型基因是從爸爸那裡拿 1 個、媽媽那裡拿 1 個！即使爸媽看起來都是顯性的 A 型和 B 型，只要各自藏著一個隱性 i，就有 1/2 × 1/2 = 1/4 的機會讓兩個 i 碰在一起變成 O 型。',
-        callout: { type: 'callout', bx: 550, by: 460, targetX: 780, targetY: 370, text: '爸媽各出一個 i → ii (O型)!' },
+        reply: '因為小孩的兩個基因是一個從爸爸來、一個從媽媽來！就算爸媽自己表現為 A 型和 B 型，只要體內都藏著一個隱性 i，就有可能各自把 i 傳給小孩變成 ii（O 型）。',
+        callout: { type: 'callout', bx: 550, by: 460, targetX: 780, targetY: 370, text: '爸媽各給一個 i → ii (O型)!' },
       },
       analogy: {
-        reply: '可以把顯性基因想成「不透明顏料」，隱性 i 想成「透明水」。爸爸帶一瓶紅顏料+一瓶水，媽媽帶一瓶藍顏料+一瓶水；各自隨機抽一瓶給小孩，如果剛好都抽到透明水，小孩就是透明的 O 型！',
+        reply: '想成抽顏色球：爸爸口袋有紅球(Iᴬ)和白球(i)，媽媽有藍球(Iᴮ)和白球(i)；兩人各盲抽一顆給小孩，剛好兩邊都抽到白球時，小孩就是 O 型！',
       },
     },
     notes: [
-      'ABO 血型由 Iᴬ、Iᴮ（對 i 為顯性，彼此共顯性）三種對偶基因控制，每人有 2 個。',
-      'A 型可能是 IᴬIᴬ 或 Iᴬi；B 型可能是 IᴮIᴮ 或 Iᴮi。',
-      '只要雙親各帶一個 i（例如 A 型 Iᴬi 與 B 型 Iᴮi），就有 25% 機率生出 O 型 (ii) 小孩。',
+      'A 型基因型可能是 IᴬIᴬ 或 Iᴬi；B 型可能是 IᴮIᴮ 或 Iᴮi。',
+      '雙親都帶有一個隱性 i 時，才有機會生出 O 型 (ii) 小孩。',
+      '只要父母其中一方是 AB 型 (IᴬIᴮ)，小孩就絕不可能是 O 型。',
     ],
-    pitfall: '常錯題型：題目只說「父母分別是 A 型與 B 型」，學生誤判「生不出 O 型」。要記得 A 型與 B 型都可能是雜合子（帶有 i）！',
+    pitfall: '題目只寫「A 型爸爸和 B 型媽媽」時，不要忘記他們可能是 Iᴬi 和 Iᴮi，四種血型都有機會生出來！',
     quiz: [
-      {
-        q: '爸爸是 AB 型、媽媽是 O 型，他們的小孩「不可能」是什麼血型？',
-        options: ['A 型', 'B 型', 'O 型'],
-        answer: 2,
-        explain: '爸爸基因型為 IᴬIᴮ，一定會給出 Iᴬ 或 Iᴮ，不可能給出 i，因此小孩不可能是 ii (O型)。',
-      },
-      {
-        q: '若父母基因型皆為 Iᴬi（都是 A 型），生出 O 型小孩的機率是多少？',
-        options: ['0%', '25%', '50%'],
-        answer: 1,
-        explain: '棋盤方格結果為 IᴬIᴬ、Iᴬi、Iᴬi、ii，其中 ii 佔 1/4 = 25%。',
-      },
-      {
-        q: '為什麼 AB 型的人表現出 A 與 B 兩種抗原特性？',
-        options: ['Iᴬ 與 Iᴮ 為共顯性（等顯性）', '因為基因突變', 'i 基因變成顯性'],
-        answer: 0,
-        explain: 'Iᴬ 與 Iᴮ 同時存在時都能表現出來，稱為共顯性。',
-      },
+      { q: '爸爸是 AB 型、媽媽是 O 型，小孩「不可能」出現哪種血型？', options: ['A 型', 'B 型', 'O 型'], answer: 2, explain: 'AB 型爸爸一定給出 Iᴬ 或 Iᴮ，不可能給出 i，故不會生出 ii (O型)。' },
+      { q: '若父母皆為 Iᴬi（都是 A 型），生出 O 型小孩的機率是多少？', options: ['0%', '25%', '50%'], answer: 1, explain: '棋盤方格四格中有 1 格為 ii，佔 25%。' },
+      { q: 'O 型血型的基因型必定是？', options: ['Iᴬi', 'ii', 'IᴬIᴮ'], answer: 1, explain: 'i 為隱性基因，需成對出現才會表現 O 型。' },
     ],
   },
 
   moon: {
     id: 'moon',
-    title: '月亮為什麼會有陰晴圓缺？地球視角大公開',
-    subject: '天文',
+    title: '國小自然：月亮為什麼會有陰晴圓缺？',
+    gradeLabel: '國小四年級',
+    subject: '自然',
     mode: 'topic',
     steps: [
       {
         title: '1. 月球不會自己發光',
-        speech: '很多人以為月亮圓缺是因為「地球擋住太陽光」，其實那是月食！平常每個月的陰晴圓缺，是因為月球繞著地球轉，我們從地球看到月球受光面的角度不同。',
+        speech: '月亮本身其實像大石頭一樣不會發光，它是靠反射太陽光才亮起來的！所以月球永遠有一半被太陽照亮、一半是暗的。',
         draw: [
-          { type: 'title', x: 50, y: 58, text: '月相變化：為什麼有陰晴圓缺？', size: 27, underline: true },
+          { type: 'title', x: 50, y: 58, text: '月相變化：為什麼有圓有缺？', size: 27, underline: true, underlineColor: '#0F766E' },
           { type: 'orbitDiagram', cx: 310, cy: 335, r: 140 },
-          { type: 'box', x: 575, y: 130, w: 370, h: 130, fill: '#FFFBEB', color: '#D97706', label: '最重要的事實' },
-          { type: 'text', x: 598, y: 192, text: '月球永遠「一半亮、一半暗」', size: 17, color: '#1B1B1F' },
-          { type: 'text', x: 598, y: 224, text: '亮面永遠朝向太陽！', size: 17, color: '#D97706' },
+          { type: 'box', x: 575, y: 130, w: 370, h: 130, fill: '#FFFBEB', color: '#D97706', label: '記住這件事' },
+          { type: 'text', x: 598, y: 192, text: '月球永遠「一半亮、一半暗」', size: 17 },
+          { type: 'text', x: 598, y: 224, text: '亮的那半邊永遠朝向太陽！', size: 17, color: '#D97706' },
         ],
       },
       {
-        title: '2. 繞地公轉與視角變化',
-        speech: '看白板左邊的軌道動畫：當月球轉到太陽和地球中間時，亮面背對我們，這就是朔（新月）；轉到地球另一側時，亮面整個正對地球，就是望（滿月）！',
+        title: '2. 繞地球轉時，我們看到的角度不同',
+        speech: '看白板左邊的動畫：月球繞著地球轉一圈大約 29.5 天。轉到太陽和地球中間時，亮面背對我們（初一新月）；轉到地球另一邊時，我們剛好看到整個亮面（十五滿月）！',
         draw: [
-          { type: 'box', x: 575, y: 285, w: 370, h: 255, fill: '#EEF3FF', color: '#2E5BFF', label: '四大月相位置（29.5 天一週期）' },
-          { type: 'text', x: 598, y: 348, text: '🌑 朔（初一）：在日地之間，看不到亮面', size: 15 },
-          { type: 'text', x: 598, y: 390, text: '🌓 上弦月（初七八）：看到右半邊亮', size: 15 },
-          { type: 'text', x: 598, y: 432, text: '🌕 望（十五）：在地球外側，滿月全亮', size: 15, color: '#D97706' },
-          { type: 'text', x: 598, y: 474, text: '🌗 下弦月（廿二三）：看到左半邊亮', size: 15 },
-          { type: 'text', x: 598, y: 516, text: '✗ 提醒：不是地球影子遮住的喔！', size: 15, color: '#E85D3F' },
+          { type: 'box', x: 575, y: 285, w: 370, h: 255, fill: '#EFF6FF', color: '#2563EB', label: '一個月的月相變化（農曆）' },
+          { type: 'text', x: 598, y: 348, text: '🌑 農曆初一（朔）：看不到月亮亮面', size: 15.5 },
+          { type: 'text', x: 598, y: 390, text: '🌓 農曆初七、八（上弦月）：亮右半邊', size: 15.5 },
+          { type: 'text', x: 598, y: 432, text: '🌕 農曆十五（望）：圓圓的滿月！', size: 15.5, color: '#D97706' },
+          { type: 'text', x: 598, y: 474, text: '🌗 農曆廿二、廿三（下弦月）：亮左半邊', size: 15.5 },
+          { type: 'text', x: 598, y: 516, text: '✗ 注意：不是被雲或地球影子擋住喔！', size: 15, color: '#DC2626' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: '因為月球公轉軌道跟地球公轉軌道有約 5 度的夾角，平常滿月時地球的影子不會打到月球上！只有偶爾剛好三者排成一直線時，才會發生「月食」。',
-        callout: { type: 'callout', bx: 580, by: 540, targetX: 310, targetY: 335, text: '軌道有 5° 傾角，平時不會遮住！' },
+        reply: '平常的圓缺不是地球影子遮住喔！那是因為月球繞地球公轉時，我們從地球看過去，看到「亮的那半邊」的比例不一樣。',
+        callout: { type: 'callout', bx: 580, by: 545, targetX: 310, targetY: 335, text: '是因為繞著地球轉的角度改變！' },
       },
       analogy: {
-        reply: '在暗室開一盞檯燈當太陽，你拿一顆橘子當月球繞著自己的頭（地球）轉一圈：當橘子在燈跟你之間，你只看到黑黑的背面；轉到另一邊時，你就會看到被照得全亮的橘子！',
+        reply: '在關燈的房間開一盞檯燈當太陽，你拿一顆白球繞著自己的頭轉一圈，就會看到球有時亮半顆、有時亮整顆！',
       },
     },
     notes: [
-      '月球自身不發光，靠反射太陽光；面向太陽的那一半永遠是亮的。',
-      '陰晴圓缺（月相變化）是因為月球繞地球公轉（週期約 29.5 天），地球上看到的亮面比例不同。',
-      '地球影子擋住月球是「月食」，與日常月相變化不同。',
+      '月球靠反射太陽光發亮，永遠是一半亮、一半暗。',
+      '月相變化週期大約是農曆一個月（約 29.5 天）。',
+      '農曆十五看到滿月，農曆初一幾乎看不到月亮。',
     ],
-    pitfall: '高頻迷思：「新月是地球把太陽擋住了」——錯！新月時月球在太陽和地球中間，地球根本擋不到它，純粹是因為亮面背對著我們。',
+    pitfall: '常見誤解：以為月亮變彎是因為被地球影子遮到（其實那是少見的月食，不是每個月的月相變化）。',
     quiz: [
-      {
-        q: '造成每個月月亮陰晴圓缺（月相變化）的主要原因是什麼？',
-        options: ['地球影子擋住月球', '月球繞地球公轉，亮面朝向地球的角度改變', '月球自己忽明忽暗'],
-        answer: 1,
-        explain: '月球公轉使日、地、月相對位置改變，地球看到的受光面比例隨之變化。',
-      },
-      {
-        q: '農曆初一（朔）時，月球大概位於什麼位置？',
-        options: ['太陽和地球之間', '地球的背陽面外側', '與太陽成 90 度'],
-        answer: 0,
-        explain: '初一新月時月球在日地之間，受光面背向地球。',
-      },
-      {
-        q: '農曆十五滿月時，月亮大約何時升起？',
-        options: ['清晨太陽升起時', '傍晚日落時分', '正中午'],
-        answer: 1,
-        explain: '滿月在太陽的對側（180度），所以太陽西下時滿月剛好從東方升起。',
-      },
+      { q: '月亮的光是從哪裡來的？', options: ['自己發光', '反射太陽光', '地球發光'], answer: 1, explain: '月球本身不發光，是反射太陽光。' },
+      { q: '農曆哪一天最容易看到圓圓的滿月？', options: ['初一', '初八', '十五'], answer: 2, explain: '農曆十五（望）時月球亮面正對地球。' },
+      { q: '從這一次滿月到下一次滿月，大約經過幾天？', options: ['7 天', '29.5 天', '365 天'], answer: 1, explain: '月球繞地球公轉造成的月相週期約 29.5 天。' },
     ],
   },
 
   catalyst: {
     id: 'catalyst',
-    title: '催化劑怎麼加快反應速率？看懂活化能門檻',
-    subject: '化學',
+    title: '國二理化：為什麼加了二氧化錳就狂冒泡泡？',
+    gradeLabel: '國二理化',
+    subject: '理化',
     mode: 'topic',
     steps: [
       {
-        title: '1. 反應像翻山越嶺',
-        speech: '化學反應就像爬一座山丘：反應物要跨過最高點的門檻，才能變成生成物。這個門檻的高度，就叫做「活化能」。',
+        title: '1. 沒加催化劑前：要翻過很高的山',
+        speech: '雙氧水自己放著也會慢慢分解成水跟氧氣，但速度超級慢！因為分子要反應前，必須先爬過一個很高的能量山丘（活化能）。',
         draw: [
-          { type: 'title', x: 50, y: 58, text: '催化劑如何加速化學反應？', size: 27, underline: true },
+          { type: 'title', x: 50, y: 58, text: '催化劑如何加快反應速率？', size: 27, underline: true, underlineColor: '#0F766E' },
           {
             type: 'functionPlot',
             x: 55, y: 110, w: 470, h: 410,
             xMin: 0, xMax: 6, yMin: 0, yMax: 8,
-            curves: [
-              { expr: '3 + 3.6*Math.exp(-Math.pow(x-2.6, 2)/1.1) - 0.32*x', color: '#1B1B1F', width: 3.2, label: '無催化劑 (高山)', labelX: 2.3 },
-            ],
-            points: [{ x: 2.6, y: 5.77, color: '#E85D3F', label: '高活化能門檻' }],
+            curves: [{ expr: '3 + 3.6*Math.exp(-Math.pow(x-2.6, 2)/1.1) - 0.32*x', color: '#182420', width: 3.2, label: '無催化劑 (高山)', labelX: 2.3 }],
+            points: [{ x: 2.6, y: 5.77, color: '#DC2626', label: '能量門檻很高' }],
           },
-          { type: 'box', x: 560, y: 130, w: 380, h: 130, fill: '#FFF7F4', color: '#E85D3F', label: '沒有催化劑時' },
-          { type: 'text', x: 582, y: 192, text: '必須翻過很高的山（活化能大）', size: 17 },
-          { type: 'text', x: 582, y: 224, text: '只有少數高能量分子過得去 → 慢！', size: 16, color: '#53535D' },
+          { type: 'box', x: 560, y: 130, w: 380, h: 130, fill: '#FEF2F2', color: '#DC2626', label: '只有雙氧水時' },
+          { type: 'text', x: 582, y: 192, text: '反應門檻太高，大多數分子過不去', size: 16.5 },
+          { type: 'text', x: 582, y: 224, text: '所以幾乎看不到氣泡！', size: 16, color: '#485A52' },
         ],
       },
       {
-        title: '2. 催化劑開了一條隧道',
-        speech: '加上一點催化劑，它並不會改變起點跟終點的高度，而是幫反應開了一條「較矮的新路徑」！山變矮了，正反應跟逆反應都會同時加速，而且反應完催化劑本身不會被消耗掉。',
+        title: '2. 加入催化劑：開一條較矮的新路',
+        speech: '加上一點黑色二氧化錳當催化劑，就像幫山開了一條較矮的捷徑！更多雙氧水分子過得去，氧氣泡泡就瞬間冒出來；而且反應完二氧化錳沒有減少，還可以重複使用！',
         draw: [
           {
             type: 'functionPlot',
             x: 55, y: 110, w: 470, h: 410,
             xMin: 0, xMax: 6, yMin: 0, yMax: 8,
             curves: [
-              { expr: '3 + 3.6*Math.exp(-Math.pow(x-2.6, 2)/1.1) - 0.32*x', color: '#848490', width: 2.4, dashed: true, label: '原路徑', labelX: 2.5 },
-              { expr: '3 + 1.6*Math.exp(-Math.pow(x-2.6, 2)/1.2) - 0.32*x', color: '#16A34A', width: 3.4, label: '加催化劑 (低門檻)', labelX: 2.2 },
+              { expr: '3 + 3.6*Math.exp(-Math.pow(x-2.6, 2)/1.1) - 0.32*x', color: '#768880', width: 2.4, dashed: true, label: '原路徑', labelX: 2.5 },
+              { expr: '3 + 1.6*Math.exp(-Math.pow(x-2.6, 2)/1.2) - 0.32*x', color: '#0F766E', width: 3.4, label: '加催化劑 (低門檻)', labelX: 2.2 },
             ],
-            points: [{ x: 2.6, y: 3.77, color: '#16A34A', label: '活化能降低!' }],
+            points: [{ x: 2.6, y: 3.77, color: '#0F766E', label: '門檻降低了!' }],
           },
-          { type: 'box', x: 560, y: 290, w: 380, h: 225, fill: '#ECFDF3', color: '#16A34A', label: '加入催化劑後的三個重點' },
-          { type: 'text', x: 582, y: 350, text: '1. 降低活化能（另闢低門檻路徑）', size: 16.5 },
-          { type: 'text', x: 582, y: 386, text: '2. 正、逆反應速率「同時」加快', size: 16.5, color: '#2E5BFF' },
-          { type: 'text', x: 582, y: 422, text: '3. 反應前後質量與性質不變', size: 16.5 },
-          { type: 'text', x: 582, y: 462, text: '✗ 注意：不會改變反應熱 ΔH 或產量！', size: 15.5, color: '#E85D3F' },
+          { type: 'box', x: 560, y: 290, w: 380, h: 225, fill: '#ECFDF5', color: '#0F766E', label: '國二理化必背 3 重點' },
+          { type: 'text', x: 582, y: 350, text: '1. 催化劑降低反應門檻（加快反應）', size: 16 },
+          { type: 'text', x: 582, y: 386, text: '2. 反應前後「本身質量與性質不變」', size: 16, color: '#2563EB' },
+          { type: 'text', x: 582, y: 422, text: '3. 不會增加氧氣的「總產量」！', size: 16, color: '#DC2626' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: '為什麼正逆反應會一起加速？因為「山丘」在反應物和生成物中間！山頭變矮了，不管你是從左邊翻到右邊（正反應），還是從右邊翻回左邊（逆反應），要爬的高度都一樣變少了！',
-        callout: { type: 'callout', bx: 565, by: 525, targetX: 280, targetY: 310, text: '左右兩邊翻山都變輕鬆了！' },
+        reply: '因為氧氣的總量是由「你倒了多少雙氧水」決定的！催化劑二氧化錳只是幫忙加快分解速度，並不會自己變成氧氣。',
+        callout: { type: 'callout', bx: 565, by: 525, targetX: 280, targetY: 310, text: '門檻變低，所以冒泡泡變快！' },
       },
       analogy: {
-        reply: '原本從台北到宜蘭要翻過九彎十八拐的北宜公路，現在挖了雪山隧道（催化劑）！起點跟終點海拔都沒變，但來回兩邊通車都變快了，而且隧道本身不會因為車子經過就消失。',
+        reply: '就像雪山隧道！台北到宜蘭距離沒變，但挖了隧道不用翻高山，車子通車就快很多，而且隧道本身不會因為車子開過去就消失。',
       },
     },
     notes: [
-      '催化劑提供活化能較低的新反應途徑，使更多分子能跨過門檻。',
-      '催化劑會同時加快正反應與逆反應速率，因此能更早達成平衡，但不改變平衡點或總產量。',
-      '催化劑不改變反應熱（ΔH），且反應前後本身的質量與化學性質不變。',
+      '雙氧水 (H₂O₂) 加二氧化錳 (MnO₂) 會快速分解出氧氣 (O₂)。',
+      '催化劑只加快反應速率，不增加最後生成的產物總量。',
+      '反應結束後，催化劑的質量和化學性質都不會改變。',
     ],
-    pitfall: '常錯考點：誤以為「多加催化劑可以做出更多產物」。錯！催化劑只能讓你「更快拿到」產物，總產量不會增加。',
+    pitfall: '段考大陷阱：「多加兩匙二氧化錳可以蒐集到更多氧氣嗎？」答案是 NO！只能更快蒐集滿，總體積一樣多。',
     quiz: [
-      {
-        q: '加入催化劑後，下列哪一個物理量「不會」改變？',
-        options: ['活化能', '反應速率', '反應熱 ΔH（起點與終點能量差）'],
-        answer: 2,
-        explain: '催化劑只降低中間過渡態的山丘高度，不改變反應物與生成物原本的能量差 ΔH。',
-      },
-      {
-        q: '在可逆反應中加入催化劑，對正反應和逆反應的影響是？',
-        options: ['只加速正反應', '正、逆反應速率同時加快', '正反應加快、逆反應變慢'],
-        answer: 1,
-        explain: '活化能降低對正逆兩方向同樣有效，兩者皆加速。',
-      },
-      {
-        q: '雙氧水分解實驗中加入二氧化錳 (MnO₂) 作為催化劑，反應結束後過濾烘乾二氧化錳，其質量會？',
-        options: ['變少', '變多', '不變'],
-        answer: 2,
-        explain: '催化劑參與中間過程後會再生，反應前後總質量不變。',
-      },
+      { q: '雙氧水製氧實驗中，二氧化錳的角色是？', options: ['反應物', '催化劑', '生成物'], answer: 1, explain: '二氧化錳是催化劑，用來加快雙氧水分解速率。' },
+      { q: '把二氧化錳的用量加倍，最後收集到的氧氣總體積會？', options: ['變兩倍', '變少', '不變（但更快完成）'], answer: 2, explain: '氧氣總產量取決於雙氧水的量，催化劑只影響快慢。' },
+      { q: '實驗結束把二氧化錳過濾烘乾再秤重，質量會？', options: ['變輕', '不變', '歸零'], answer: 1, explain: '催化劑反應前後質量與性質不變。' },
     ],
   },
 };
 
-/**
- * Parse simple linear equation `ax + b = c` (with optional negative signs / spaces).
- */
 function parseLinearEquation(text) {
   const cleaned = text.replace(/\s+/g, '').replace(/−/g, '-');
   const match = cleaned.match(/^([+-]?\d*)x([+-]\d+)?=([+-]?\d+)$/i);
@@ -452,105 +431,81 @@ function parseLinearEquation(text) {
   return { a, b, c, rhsAfterMove: c - b, xVal: (c - b) / a };
 }
 
-function buildLinearHomeworkLesson(eq, rawPrompt) {
+function buildLinearHomeworkLesson(eq) {
   const { a, b, c, rhsAfterMove, xVal } = eq;
   const lhsText = `${a === 1 ? '' : a === -1 ? '-' : a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}`;
-  const moveWord = b >= 0 ? `把 +${b} 移到右邊（兩邊同減 ${b}）` : `把 ${b} 移到右邊（兩邊同加 ${Math.abs(b)}）`;
+  const moveWord = b >= 0 ? `把 +${b} 移到右邊（兩邊同時減 ${b}）` : `把 ${b} 移到右邊（兩邊同時加 ${Math.abs(b)}）`;
   const xFormatted = Number.isInteger(xVal) ? String(xVal) : xVal.toFixed(2);
 
   return {
     id: 'hw-' + Date.now(),
-    title: `作業引導：解方程式 ${lhsText} = ${c}`,
+    title: `一次方程式引導：${lhsText} = ${c}`,
+    gradeLabel: '國一 / 高年級',
     subject: '數學',
     mode: 'homework',
-    homeworkMeta: {
-      stage: 0, // 0: asking what to move, 1: asking rhsAfterMove, 2: asking final x, 3: done
-      a, b, c, rhsAfterMove, xVal, xFormatted, lhsText,
-    },
+    homeworkMeta: { stage: 0, a, b, c, rhsAfterMove, xVal, xFormatted, lhsText },
     steps: [
       {
-        title: '1. 先把題目擺上天平',
-        speech: `我們先不急著偷看答案！把 ${lhsText} 等於 ${c} 想像成一個左右平衡的天平。想要讓 x 單獨留下來，第一步你覺得該先把誰從左邊請走？`,
+        title: '1. 擺上天平看兩邊',
+        speech: `我們先不直接看答案！把 ${lhsText} 等於 ${c} 想像成一個左右平衡的天平。想讓 x 單獨留在左邊，第一步你會先把哪一個數字請走？`,
         draw: [
-          { type: 'title', x: 50, y: 58, text: `作業引導：${lhsText} = ${c}`, size: 28, underline: true },
+          { type: 'title', x: 50, y: 58, text: `解方程式引導：${lhsText} = ${c}`, size: 27, underline: true, underlineColor: '#0F766E' },
           { type: 'balanceScale', cx: 290, cy: 310, left: lhsText, right: String(c), tilt: 0 },
-          { type: 'box', x: 565, y: 140, w: 375, h: 175, fill: '#FFF7F4', color: '#E85D3F', label: '思考第一步（先自己試試看！）' },
+          { type: 'box', x: 565, y: 140, w: 375, h: 175, fill: '#FFFBEB', color: '#D97706', label: '第一步：先想想看' },
           { type: 'text', x: 588, y: 205, text: '目標：讓左邊只剩下孤單的 x', size: 17 },
-          { type: 'text', x: 588, y: 242, text: '先處理離 x 比較遠的常數項，', size: 16, color: '#53535D' },
-          { type: 'text', x: 588, y: 274, text: '在右側聊天框告訴我：該先移走誰？', size: 16, color: '#E85D3F' },
+          { type: 'text', x: 588, y: 242, text: '先處理旁邊單獨的常數數字，', size: 16, color: '#485A52' },
+          { type: 'text', x: 588, y: 274, text: '在右側輸入：要先移走哪個數字？', size: 16, color: '#D97706' },
         ],
       },
       {
-        title: '2. 常數項移項',
-        speech: `沒錯！${moveWord}。為了維持天平平衡，等號右邊原本是 ${c}，現在要變成 ${c} ${b >= 0 ? '減 ' + b : '加 ' + Math.abs(b)}。算算看右邊現在剩多少？`,
+        title: '2. 等量公理／移項',
+        speech: `答對了！${moveWord}。右邊原本是 ${c}，現在要變成 ${c} ${b >= 0 ? '減 ' + b : '加 ' + Math.abs(b)}。算算看右邊現在剩多少？`,
         draw: [
           { type: 'balanceScale', cx: 290, cy: 310, left: `${a === 1 ? '' : a}x`, right: String(rhsAfterMove), tilt: 0 },
-          { type: 'box', x: 565, y: 335, w: 375, h: 130, fill: '#EEF3FF', color: '#2E5BFF', label: '第二步推導' },
+          { type: 'box', x: 565, y: 335, w: 375, h: 130, fill: '#EFF6FF', color: '#2563EB', label: '第二步推導' },
           { type: 'text', x: 588, y: 396, text: `${lhsText} = ${c}`, size: 17, mono: true },
-          { type: 'text', x: 588, y: 432, text: `→ ${a === 1 ? '' : a}x = ${c} ${b >= 0 ? '- ' + b : '+ ' + Math.abs(b)} = ${rhsAfterMove}`, size: 18, mono: true, color: '#2E5BFF' },
+          { type: 'text', x: 588, y: 432, text: `→ ${a === 1 ? '' : a}x = ${c} ${b >= 0 ? '- ' + b : '+ ' + Math.abs(b)} = ${rhsAfterMove}`, size: 18, mono: true, color: '#2563EB' },
         ],
       },
       {
-        title: '3. 算出 x 的值',
-        speech: `漂亮！現在左邊只剩 ${a} 個 x，右邊是 ${rhsAfterMove}。最後一步，兩邊一起除以 ${a}，你算出的 x 是多少呢？`,
+        title: '3. 算出 x 並驗算',
+        speech: `好棒！現在只剩 ${a} 個 x 等於 ${rhsAfterMove}。最後一步，兩邊一起除以 ${a}，x 等於多少呢？`,
         draw: [
-          { type: 'box', x: 565, y: 485, w: 375, h: 105, fill: '#ECFDF3', color: '#16A34A', label: '第三步：解出 x ！' },
-          { type: 'text', x: 588, y: 545, text: `x = ${rhsAfterMove} ÷ ${a} = ${xFormatted}  ✓`, size: 22, mono: true, color: '#16A34A' },
-          { type: 'text', x: 588, y: 575, text: `代回驗算：${a}×(${xFormatted}) ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${c}`, size: 14, mono: true, color: '#53535D' },
+          { type: 'box', x: 565, y: 485, w: 375, h: 105, fill: '#ECFDF5', color: '#0F766E', label: '第三步：得出 x！' },
+          { type: 'text', x: 588, y: 545, text: `x = ${rhsAfterMove} ÷ ${a} = ${xFormatted}  ✓`, size: 22, mono: true, color: '#0F766E' },
+          { type: 'text', x: 588, y: 575, text: `代回驗算：${a}×(${xFormatted}) ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${c}`, size: 14, mono: true, color: '#485A52' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: `因為等號就像天平！左邊做 ${b >= 0 ? '減 ' + b : '加 ' + Math.abs(b)}，右邊也必須做一樣的動作，這樣兩邊才會繼續相等。先處理加減、再處理乘除，是最不容易算錯的順序！`,
-        callout: { type: 'callout', bx: 70, by: 450, targetX: 290, targetY: 310, text: '兩邊同時加減乘除，天平才不會歪！' },
+        reply: `等號就像天平！左邊減掉或加上一個數，右邊也必須做一樣的動作，兩邊才會繼續相等。先移走加減的數字，最後再除掉 x 前面的倍數！`,
+        callout: { type: 'callout', bx: 70, by: 450, targetX: 290, targetY: 310, text: '兩邊做一樣的事，天平才會平！' },
       },
       analogy: {
-        reply: '解方程式就像拆禮物！外層包裝（加減的常數）要先拆掉，才能打開裡面的盒子（乘在 x 前面的係數）。',
+        reply: '就像拆洋蔥或拆禮物：先拆掉外面的加減包裝，最後再把乘在 x 旁邊的數字除掉。',
       },
     },
     notes: [
-      `解一次方程式 ${lhsText} = ${c} 的原則：等號兩邊同加減、同乘除（維持天平平衡）。`,
-      `步驟一：先將常數項 ${b} 移項，得到 ${a}x = ${rhsAfterMove}。`,
-      `步驟二：兩邊同除以 ${a}，解得 x = ${xFormatted}，最後代回原式驗算。`,
+      `解 ${lhsText} = ${c} 的原則：維持天平兩邊平衡（等量公理／移項要變號）。`,
+      `步驟一：移走常數 ${b}，得到 ${a}x = ${rhsAfterMove}。`,
+      `步驟二：兩邊同除以 ${a}，得到 x = ${xFormatted}，記得代回驗算。`,
     ],
-    pitfall: '最常錯的地方：移項時忘記變號！（例如把 +5 移到右邊卻還是寫成 +5，應該要變 -5 才對）。',
+    pitfall: '最常錯：移項忘記變號！（把 +5 移到等號另一邊要變成 -5，不是 +5）。',
     quiz: [
-      {
-        q: `在方程式 ${lhsText} = ${c} 中，把 ${b >= 0 ? '+' + b : b} 移到等號右邊後會變成什麼？`,
-        options: [b >= 0 ? `+${b}` : `${b}`, b >= 0 ? `-${b}` : `+${Math.abs(b)}`, `×${b}`],
-        answer: 1,
-        explain: '移項等於兩邊同時進行相反運算，加變減、減變加。',
-      },
-      {
-        q: `解出 x = ${xFormatted} 之後，如何最快檢查自己有沒有算錯？`,
-        options: ['再背一次公式', `把 x = ${xFormatted} 代回原本左式看是否等於 ${c}`, '直接猜下一個整數'],
-        answer: 1,
-        explain: '代回原方程式驗算是最準確的自我檢查方法。',
-      },
-      {
-        q: '如果方程式是 4x = 20，下一步該怎麼做？',
-        options: ['兩邊同減 4', '兩邊同除以 4', '兩邊同乘以 4'],
-        answer: 1,
-        explain: '4x 表示 4 乘以 x，消除係數 4 需要用除法。',
-      },
+      { q: `在 ${lhsText} = ${c} 中，把 ${b >= 0 ? '+' + b : b} 移到等號右邊會變成什麼？`, options: [b >= 0 ? `+${b}` : `${b}`, b >= 0 ? `-${b}` : `+${Math.abs(b)}`, `×${b}`], answer: 1, explain: '移項等於相反運算，加變減、減變加。' },
+      { q: `算出 x = ${xFormatted} 後，如何確認自己沒有算錯？`, options: [`代回原式驗算是否等於 ${c}`, '靠感覺猜', '再重抄題目'], answer: 0, explain: '把算出的 x 代回原本左式檢查是否等於右式最準確。' },
+      { q: '若遇到 4x = 20，下一步該怎麼做？', options: ['兩邊同減 4', '兩邊同除以 4', '兩邊同乘以 4'], answer: 1, explain: '4x 是 4 乘 x，需要用除法消去 4。' },
     ],
   };
 }
 
-/**
- * Parse two linear equations or a function expression y = ...
- */
 function buildDynamicMathPlotLesson(prompt) {
-  // Check for intersection of two lines like y = 2x + 1 and y = -x + 4
   const fnMatches = [...prompt.matchAll(/y\s*=\s*([0-9xX+\-*/.^()\s]+)/g)];
   if (fnMatches.length >= 2) {
     const expr1 = fnMatches[0][1].trim().replace(/(\d)(x)/gi, '$1*$2');
     const expr2 = fnMatches[1][1].trim().replace(/(\d)(x)/gi, '$1*$2');
-    // Numeric scan for intersection
-    let bestX = null;
-    let bestY = null;
-    let bestDiff = Infinity;
+    let bestX = null, bestY = null, bestDiff = Infinity;
     try {
       const f1 = new Function('x', `return (${expr1.replace(/\^/g, '**')});`);
       const f2 = new Function('x', `return (${expr2.replace(/\^/g, '**')});`);
@@ -563,208 +518,124 @@ function buildDynamicMathPlotLesson(prompt) {
         }
       }
     } catch (_) {}
-
     const pts = bestDiff < 0.25 && bestX !== null
-      ? [{ x: bestX, y: bestY, color: '#E85D3F', label: `交點 (${bestX}, ${bestY})` }]
+      ? [{ x: bestX, y: bestY, color: '#DC2626', label: `交點 (${bestX}, ${bestY})` }]
       : [];
 
     return {
       id: 'plot-' + Date.now(),
-      title: `函數交點圖解：y = ${fnMatches[0][1].trim()} 與 y = ${fnMatches[1][1].trim()}`,
+      title: `國一直角坐標圖解：y = ${fnMatches[0][1].trim()} 與 y = ${fnMatches[1][1].trim()}`,
+      gradeLabel: '國一數學',
       subject: '數學',
       mode: 'topic',
       steps: [
         {
-          title: '1. 畫出兩條函數圖形',
-          speech: '與其硬算聯立方程式，我們先讓白板把兩條線都算出來畫上去！兩條線同時滿足的點，就是它們碰頭的地方。',
+          title: '1. 在方格紙畫出兩條直線',
+          speech: '國一下學期學二元一次方程式圖形時，把兩條式子畫在直角坐標平面上，它們碰頭的那一點就是聯立方程式的解！',
           draw: [
-            { type: 'title', x: 50, y: 58, text: '函數圖形與聯立交點', size: 27, underline: true },
+            { type: 'title', x: 50, y: 58, text: '二元一次方程式圖形與交點', size: 26, underline: true, underlineColor: '#0F766E' },
             {
               type: 'functionPlot',
               x: 55, y: 110, w: 470, h: 420,
               xMin: -4, xMax: 5, yMin: -4, yMax: 8,
               curves: [
-                { expr: expr1, color: '#2E5BFF', width: 3.2, label: `y = ${fnMatches[0][1].trim()}`, labelX: 1.8 },
-                { expr: expr2, color: '#16A34A', width: 3.2, label: `y = ${fnMatches[1][1].trim()}`, labelX: 2.2 },
+                { expr: expr1, color: '#2563EB', width: 3.2, label: `y = ${fnMatches[0][1].trim()}`, labelX: 1.8 },
+                { expr: expr2, color: '#0F766E', width: 3.2, label: `y = ${fnMatches[1][1].trim()}`, labelX: 2.2 },
               ],
               points: pts,
             },
-            { type: 'box', x: 560, y: 130, w: 380, h: 200, fill: '#EEF3FF', color: '#2E5BFF', label: '幾何與代數的連結' },
-            { type: 'text', x: 582, y: 192, text: `① 藍線：y = ${fnMatches[0][1].trim()}`, size: 17, mono: true, color: '#2E5BFF' },
-            { type: 'text', x: 582, y: 228, text: `② 綠線：y = ${fnMatches[1][1].trim()}`, size: 17, mono: true, color: '#16A34A' },
-            { type: 'text', x: 582, y: 272, text: pts.length ? `★ 紅點交會處：(${bestX}, ${bestY})` : '觀察兩條曲線的趨勢', size: 18, color: '#E85D3F' },
-          ],
-        },
-        {
-          title: '2. 聯立驗證交點',
-          speech: pts.length
-            ? `看圖一眼就看到兩條線交在 (${bestX}, ${bestY})！這代表把 x 等於 ${bestX} 代進兩條式子，算出來的 y 都會剛好是 ${bestY}。`
-            : '在座標軸上畫出來之後，你就能一眼看出兩條曲線的變化速度與交會位置！',
-          draw: [
-            { type: 'box', x: 560, y: 360, w: 380, h: 150, fill: '#ECFDF3', color: '#16A34A', label: '重點結論' },
-            { type: 'text', x: 582, y: 422, text: '「聯立方程式的解」', size: 18, color: '#1B1B1F' },
-            { type: 'text', x: 582, y: 458, text: '＝「兩條線圖形的交點座標」', size: 18, color: '#16A34A' },
+            { type: 'box', x: 560, y: 130, w: 380, h: 215, fill: '#EFF6FF', color: '#2563EB', label: '從圖形找答案' },
+            { type: 'text', x: 582, y: 192, text: `① 藍線：y = ${fnMatches[0][1].trim()}`, size: 17, mono: true, color: '#2563EB' },
+            { type: 'text', x: 582, y: 228, text: `② 綠線：y = ${fnMatches[1][1].trim()}`, size: 17, mono: true, color: '#0F766E' },
+            { type: 'text', x: 582, y: 274, text: pts.length ? `★ 紅點交會：(${bestX}, ${bestY})` : '觀察兩線趨勢', size: 18, color: '#DC2626' },
+            { type: 'text', x: 582, y: 314, text: '交點座標 ＝ 聯立方程式的解！', size: 16 },
           ],
         },
       ],
       faq: {
-        why: { reply: '因為曲線上的每一個點，都是「滿足那條方程式的 (x, y)」。所以同時在兩條線上的交點，就是同時滿足兩個方程式的解！' },
-        analogy: { reply: '就像兩位朋友約好在不同路線上騎車，只有兩條路線在十字路口交叉的那一點，他們才會在同一時間碰面！' },
+        why: { reply: '因為直線上的每一點都符合該條方程式，所以同時落在兩條線上的交點，就是同時滿足兩條式子的唯一一組 (x, y)！' },
+        analogy: { reply: '就像兩位同學各沿著一條馬路走，十字路口交叉的那個點，就是他們會碰面的唯一位置。' },
       },
-      notes: [
-        '方程式的圖形是所有滿足該式子 (x, y) 的集合。',
-        '兩條函數圖形的交點座標，正好就是聯立方程式的共同解。',
-      ],
-      pitfall: '若兩條直線斜率相同但截距不同，它們會互相平行、永不相交，代表聯立方程式「無解」。',
+      notes: ['兩條不平行的直線在坐標平面上只會有一個交點，代表聯立方程式有唯一解。'],
+      pitfall: '如果兩條直線互相平行、沒有交點，代表聯立方程式「無解」。',
       quiz: [
-        { q: '兩條直線的圖形交於 (1, 3)，這代表什麼意義？', options: ['x=1, y=3 同時滿足兩條直線方程式', '兩條線互相平行', '斜率都是 3'], answer: 0, explain: '交點同時落在兩條直線上，故座標同時符合兩條式子。' },
-        { q: '如果兩條直線平行且不重合，聯立方程式會有幾個解？', options: ['1 個解', '無解', '無限多解'], answer: 1, explain: '平行線沒有交點，因此無解。' },
-      ],
-    };
-  }
-
-  // Single function plot e.g. y = x^2 - 2x or x^2
-  if (fnMatches.length === 1 || /\bx\^?2\b|\bsin\b|\bcos\b/i.test(prompt)) {
-    const rawExpr = fnMatches[0] ? fnMatches[0][1].trim() : 'x^2';
-    const jsExpr = rawExpr.replace(/(\d)(x)/gi, '$1*$2').replace(/\^/g, '**');
-    return {
-      id: 'fn-' + Date.now(),
-      title: `函數圖形解析：y = ${rawExpr}`,
-      subject: '數學',
-      mode: 'topic',
-      steps: [
-        {
-          title: '1. 描繪函數圖形',
-          speech: `我們把函數 y 等於 ${rawExpr} 在座標平面上即時算出來並畫給你看！注意看曲線在通過原點與頂點時的變化速度。`,
-          draw: [
-            { type: 'title', x: 50, y: 58, text: `函數圖解：y = ${rawExpr}`, size: 27, underline: true },
-            {
-              type: 'functionPlot',
-              x: 55, y: 110, w: 480, h: 420,
-              xMin: -4, xMax: 4, yMin: -4, yMax: 8,
-              curves: [{ expr: jsExpr, color: '#2E5BFF', width: 3.4, label: `y = ${rawExpr}`, labelX: 1.6 }],
-            },
-            { type: 'box', x: 565, y: 130, w: 375, h: 190, fill: '#EEF3FF', color: '#2E5BFF', label: '看懂函數圖形的 3 個關鍵' },
-            { type: 'text', x: 588, y: 195, text: '1. x 軸截距：圖形碰到橫軸的地方', size: 16 },
-            { type: 'text', x: 588, y: 232, text: '2. y 軸截距：x = 0 時的高度', size: 16 },
-            { type: 'text', x: 588, y: 269, text: '3. 升降趨勢：斜率正負與極值頂點', size: 16, color: '#E85D3F' },
-          ],
-        },
-      ],
-      faq: {
-        why: { reply: '這個圖形不是手繪亂畫的，而是白板引擎針對幾百個 x 座標逐一算出真實 y 值連出來的！' },
-        analogy: { reply: '你可以把函數想成一台飲料販賣機：你投進一個 x，機器就吐出唯一的高度 y，把所有高度點連起來就是曲線。' },
-      },
-      notes: [`函數 y = ${rawExpr} 在平面上的變化可以直接透過截距與極值觀察。`],
-      pitfall: '畫函數圖形時記得先檢查 x=0 的位置與曲線對稱軸，避免只描兩個點就誤畫成直線。',
-      quiz: [
-        { q: '想找函數圖形跟 y 軸的交點，應該代入哪個值？', options: ['y = 0', 'x = 0', 'x = 1'], answer: 1, explain: 'y 軸上的每一點 x 座標都是 0。' },
+        { q: '兩條直線交於 (1, 3)，代表哪一組是聯立方程式的解？', options: ['x=1, y=3', 'x=3, y=1', '無解'], answer: 0, explain: '交點座標 (1, 3) 即代表 x=1、y=3。' },
       ],
     };
   }
   return null;
 }
 
-/**
- * Fallback structured lesson builder when user enters custom notes/topic in Built-in mode.
- */
 function buildCustomFallbackLesson(prompt, mode, attachments = []) {
   const lower = prompt.toLowerCase();
-  if (lower.includes('拋') || lower.includes('弧線') || lower.includes('球') || lower.includes('重力')) {
-    return structuredClone(CURATED_LESSONS.projectile);
-  }
-  if (lower.includes('導數') || lower.includes('微分') || lower.includes('切線') || lower.includes('斜率')) {
-    return structuredClone(CURATED_LESSONS.derivative);
-  }
-  if (lower.includes('血型') || lower.includes('基因') || lower.includes('遺傳') || lower.includes('棋盤')) {
-    return structuredClone(CURATED_LESSONS.genetics);
-  }
-  if (lower.includes('月亮') || lower.includes('圓缺') || lower.includes('月相')) {
-    return structuredClone(CURATED_LESSONS.moon);
-  }
-  if (lower.includes('催化劑') || lower.includes('反應速率') || lower.includes('活化能')) {
-    return structuredClone(CURATED_LESSONS.catalyst);
-  }
+  if (lower.includes('1/2') || lower.includes('分數') || lower.includes('通分')) return structuredClone(CURATED_LESSONS['fraction-add']);
+  if (lower.includes('三角形') || lower.includes('除以 2') || lower.includes('除以2') || lower.includes('面積')) return structuredClone(CURATED_LESSONS['triangle-area']);
+  if (lower.includes('畢氏') || lower.includes('勾股') || lower.includes('斜邊') || lower.includes('直角三角形')) return structuredClone(CURATED_LESSONS.pythagoras);
+  if (lower.includes('拋') || lower.includes('球') || lower.includes('落地') || lower.includes('重力')) return structuredClone(CURATED_LESSONS.projectile);
+  if (lower.includes('血型') || lower.includes('基因') || lower.includes('遺傳') || lower.includes('棋盤')) return structuredClone(CURATED_LESSONS.genetics);
+  if (lower.includes('月亮') || lower.includes('圓缺') || lower.includes('月相')) return structuredClone(CURATED_LESSONS.moon);
+  if (lower.includes('催化劑') || lower.includes('二氧化錳') || lower.includes('雙氧水') || lower.includes('反應速率')) return structuredClone(CURATED_LESSONS.catalyst);
 
-  const eq = parseLinearEquation(prompt.replace(/^解方程式[:：]?\s*/i, ''));
-  if (eq) {
-    return buildLinearHomeworkLesson(eq, prompt);
-  }
+  const eq = parseLinearEquation(prompt.replace(/^解(一元一次)?(方程式|未知數)[:：]?\s*/i, ''));
+  if (eq) return buildLinearHomeworkLesson(eq);
 
   const mathPlot = buildDynamicMathPlotLesson(prompt);
   if (mathPlot) return mathPlot;
 
-  // Extract notes from text attachments or prompt
   const textAtts = attachments.filter((a) => a.textContent).map((a) => a.textContent).join('\n');
-  const combinedText = (textAtts ? textAtts + '\n' : '') + prompt;
-  const sentences = combinedText
-    .split(/[。！？\n；]+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 3)
-    .slice(0, 4);
-
+  const combined = (textAtts ? textAtts + '\n' : '') + prompt;
+  const sentences = combined.split(/[。！？\n；]+/).map((s) => s.trim()).filter((s) => s.length > 3).slice(0, 4);
   const pt1 = (sentences[0] || prompt).slice(0, 26);
-  const pt2 = (sentences[1] || '拆解核心因果與關鍵定義').slice(0, 26);
-  const pt3 = (sentences[2] || '畫出比較圖與常見易錯陷阱').slice(0, 26);
-
-  const modeLabel = mode === 'homework' ? '作業引導' : mode === 'exam' ? '考前重點串講' : '主題概念拆解';
+  const pt2 = (sentences[1] || '找出關鍵條件與因果關係').slice(0, 26);
+  const pt3 = (sentences[2] || '整理重點結論與常考提醒').slice(0, 26);
   const shortTitle = prompt.length > 24 ? prompt.slice(0, 24) + '…' : prompt;
 
   return {
     id: 'custom-' + Date.now(),
-    title: `${modeLabel}：${shortTitle}`,
+    title: shortTitle,
+    gradeLabel: '國中小自訂',
     subject: '綜合',
     mode,
     steps: [
       {
-        title: '1. 拆解問題核心',
+        title: '1. 拆解題目條件',
         speech: mode === 'homework'
-          ? `收到你的問題「${shortTitle}」！我們先別急著看結論，先把題目條件放上白板整理清楚。你先看看第一步你會從哪裡下手？`
-          : `好，我們今天一起來搞懂「${shortTitle}」！我先把這題的核心拆成三個好理解的模塊畫在白板上。`,
+          ? `收到你的題目「${shortTitle}」！我們先把已知條件寫在方格紙上，你先試著告訴我第一步你會怎麼想？`
+          : `我們一起來看「${shortTitle}」！我先在筆記板上把重點拆成三個小步驟。`,
         draw: [
-          { type: 'title', x: 50, y: 58, text: shortTitle, size: 26, underline: true },
-          { type: 'box', x: 55, y: 120, w: 280, h: 140, fill: '#EEF3FF', color: '#2E5BFF', label: '① 起點與已知條件' },
+          { type: 'title', x: 50, y: 58, text: shortTitle, size: 26, underline: true, underlineColor: '#0F766E' },
+          { type: 'box', x: 55, y: 120, w: 280, h: 140, fill: '#EFF6FF', color: '#2563EB', label: '① 題目給了什麼' },
           { type: 'text', x: 75, y: 190, text: pt1, size: 15.5 },
-          { type: 'arrow', x1: 345, y1: 190, x2: 405, y2: 190, color: '#1B1B1F', label: '推導' },
-          { type: 'box', x: 415, y: 120, w: 280, h: 140, fill: '#FFF7F4', color: '#E85D3F', label: '② 關鍵機制 / 轉折' },
+          { type: 'arrow', x1: 345, y1: 190, x2: 405, y2: 190, color: '#182420', label: '推演' },
+          { type: 'box', x: 415, y: 120, w: 280, h: 140, fill: '#FFFBEB', color: '#D97706', label: '② 關鍵轉換' },
           { type: 'text', x: 435, y: 190, text: pt2, size: 15.5 },
         ],
       },
       {
-        title: '2. 建立因果與易錯提醒',
-        speech: `接著看第三步：把前面兩個觀念串起來，並特別標出最容易搞混的陷阱。如果在右上角「AI 引擎設定」填入你的 Gemini 或 OpenAI Key，任何冷門題目與照片也都能即時生成專屬手繪圖解喔！`,
+        title: '2. 筆記結論與練習提醒',
+        speech: `接下來看最後的重點整理。如果想針對課本拍照題目自動畫圖解析，也可以在右上角「模型設定」填入個人 API Key 喔！`,
         draw: [
-          { type: 'arrow', x1: 705, y1: 190, x2: 755, y2: 190, color: '#1B1B1F' },
-          { type: 'box', x: 765, y: 120, w: 195, h: 140, fill: '#ECFDF3', color: '#16A34A', label: '③ 核心結論' },
+          { type: 'arrow', x1: 705, y1: 190, x2: 755, y2: 190, color: '#182420' },
+          { type: 'box', x: 765, y: 120, w: 195, h: 140, fill: '#ECFDF5', color: '#0F766E', label: '③ 核心重點' },
           { type: 'text', x: 782, y: 190, text: pt3, size: 14.5 },
-          { type: 'box', x: 55, y: 310, w: 660, h: 190, fill: '#FFFFFF', color: '#1B1B1F', label: '老師的白板筆記區' },
-          { type: 'text', x: 78, y: 375, text: '• 先搞清楚「為什麼會發生」，再記結論與公式', size: 16.5 },
-          { type: 'text', x: 78, y: 415, text: '• 隨時點右側「這一步為什麼？」或用畫筆圈出你不理解的地方', size: 16.5, color: '#2E5BFF' },
-          { type: 'text', x: 78, y: 455, text: '• 提示：於設定中貼上 Gemini / OpenAI Key 可解鎖全學科任意照片解析', size: 14.5, color: '#848490' },
+          { type: 'box', x: 55, y: 310, w: 660, h: 185, fill: '#FFFFFF', color: '#182420', label: '小黑板複習提醒' },
+          { type: 'text', x: 78, y: 375, text: '• 先看懂步驟之間的因果，再背公式會更牢', size: 16.5 },
+          { type: 'text', x: 78, y: 415, text: '• 左邊的畫筆可以直接在題目旁邊列算式或畫重點', size: 16.5, color: '#0F766E' },
+          { type: 'text', x: 78, y: 455, text: '• 提示：於模型設定填入個人 Gemini / OpenAI Key 可解析拍照考卷', size: 14.5, color: '#768880' },
         ],
       },
     ],
     faq: {
       why: {
-        reply: '這部分最關鍵的是把已知條件跟目標拆開！告訴我你目前卡在哪一個詞彙或步驟，我用更白話的例子畫給你看。',
-        callout: { type: 'callout', bx: 55, by: 520, targetX: 555, targetY: 260, text: '就是這個關鍵轉折點！' },
+        reply: '我們先把題目看成「已知 → 中間方法 → 最後答案」三格，告訴我你卡在哪一格，我再舉更簡單的生活例子！',
+        callout: { type: 'callout', bx: 55, by: 515, targetX: 555, targetY: 260, text: '關鍵轉換看這裡！' },
       },
-      analogy: {
-        reply: '把這個概念想成蓋房子：步驟 ① 是打地基（已知條件），步驟 ② 是立起樑柱（規則推導），最後才會得出屋頂的結論！',
-      },
+      analogy: { reply: '就像組裝積木一樣，先把說明書的零件分好，一步一步拼起來就不容易出錯。' },
     },
-    notes: [
-      `核心主題：${shortTitle}`,
-      `關鍵拆解：${pt1} → ${pt2} → ${pt3}`,
-    ],
-    pitfall: '學習時避免只背最後一句結論，試著遮住白板第 2 格自己重講一次因果關係。',
+    notes: [`主題：${shortTitle}`, `推導脈絡：${pt1} → ${pt2} → ${pt3}`],
+    pitfall: '寫應用題或自然題時，記得先把單位與題目問的對象圈出來。',
     quiz: [
-      {
-        q: `關於「${shortTitle}」，下列哪種學習順序最能真正掌握？`,
-        options: ['直接背答案', '先釐清已知條件，再推導中間機制，最後自我驗算', '跳過圖片只看文字'],
-        answer: 1,
-        explain: '理解因果推導鏈比死記結論更穩固，也能應付變化題。',
-      },
+      { q: `複習「${shortTitle}」時，哪個習慣最不容易粗心？`, options: ['直接心算跳步驟', '把條件寫在紙上、算完代回檢查', '只背最後答案'], answer: 1, explain: '條列條件與驗算是國中小最有效的防粗心方法。' },
     ],
   };
 }

@@ -31,10 +31,22 @@
     bindClassroomEvents();
     bindModalEvents();
 
+    // Unlock Web Speech API on the very first touch/pointer gesture for mobile Safari & Chrome
+    const unlockOnce = () => speech.unlock();
+    document.addEventListener('touchstart', unlockOnce, { capture: true, passive: true, once: true });
+    document.addEventListener('pointerdown', unlockOnce, { capture: true, passive: true, once: true });
+
     speech.onSpeakStateChange = (speaking) => {
       $('#tutor-avatar')?.classList.toggle('speaking', speaking);
       $('#status-wave')?.classList.toggle('active', speaking || board?.isAnimating);
       $('#interrupt-fab')?.classList.toggle('hidden', !speaking && !state.isPlaying);
+    };
+
+    let blockedToastShown = false;
+    speech.onBlockedAutoplay = () => {
+      if (blockedToastShown || !speech.enabled) return;
+      blockedToastShown = true;
+      showToast('若手機沒有聲音，請解除側邊靜音鍵並點一下「重播此步驟」🔊');
     };
   }
 

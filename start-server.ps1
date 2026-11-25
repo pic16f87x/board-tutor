@@ -10,7 +10,7 @@ $Listener = [System.Net.Sockets.TcpListener]::new($BindAddr, $Port)
 $Listener.Start()
 $Url = "http://127.0.0.1:$Port/"
 
-Write-Host "ahaboard AI 白板家教已啟動於 $Url (按 Ctrl+C 停止)" -ForegroundColor Green
+Write-Host "小黑板教室 ChalkNote Studio 已啟動於 $Url (按 Ctrl+C 停止)" -ForegroundColor Green
 if ($Lan) {
   $LanIPs = Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
     Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } |
